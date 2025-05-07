@@ -1,0 +1,20 @@
+{
+  "name": "mersion-api",
+  "version": "0.0.1",
+  "description": "Mersion is a backend API that helps modders upload, version, and manage dependencies for game mods.",
+  "homepage": "https://github.com/brendanddev/Mersion-API#readme",
+  "bugs": {
+    "url": "https://github.com/brendanddev/Mersion-API/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brendanddev/Mersion-API.git"
+  },
+  "license": "ISC",
+  "author": "Brendan Dileo",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

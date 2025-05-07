@@ -15,6 +15,25 @@ const port = 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
+const db = new sqlite3(path.join(__dirname, 'mersion.db'));
+console.log('Successfully Connected to SQLite Database');
+
+db.run(`
+    CREATE TABLE IF NOT EXISTS mods (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+    );
+`);
+
+// Get all Mods
+app.get('/api/mods', (req, res) => {
+    db.all(`SELECT * FROM mods`, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(rows);
+    });
+});
+
+
 // Test Route
 app.get('/', (req, res) => {
     console.log('Request');

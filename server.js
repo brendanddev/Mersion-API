@@ -18,11 +18,11 @@ app.use(bodyParser.json());
 const db = new sqlite3(path.join(__dirname, 'mersion.db'));
 console.log('Successfully Connected to SQLite Database');
 
-db.run(`
+db.exec(`
     CREATE TABLE IF NOT EXISTS mods (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-    );
+        name TEXT NOT NULL
+    )
 `);
 
 // Get all Mods

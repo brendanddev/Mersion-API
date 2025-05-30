@@ -1,5 +1,4 @@
 
-
 // comicModel.js
 // Defines schema and model for comics in the database
 

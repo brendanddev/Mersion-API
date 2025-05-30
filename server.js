@@ -8,7 +8,7 @@ const logger = require('./utils/logger');
 
 dotenv.config();
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 4001;
 
 app.use(cors());
 app.use(express.json());

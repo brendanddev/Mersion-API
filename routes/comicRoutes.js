@@ -11,4 +11,10 @@ router.get('/', (req, res) => {
     res.json({ message: 'Comics route working' });
 });
 
+router.post('/', (req, res) => {
+    const data = req.body;
+    logger.log('POST /api/comics received data: ', data);
+    res.json({ message: 'POST Request Received', data});
+});
+
 module.exports = router;

@@ -57,6 +57,14 @@ router.post('/', async (req, res) => {
 // PUT update an existing comic by id
 router.put('/:id', async (req, res) => {
     try {
+        const updatedComic = await Comic.findByIdAndUpdate( 
+            req.params.id, 
+            req.body, 
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedComic) return res.status(404).json({ error: 'Comic not found' });
+        res.status(200).json(updatedComic);
     } catch (error) {
         logger.error(`PUT /api/comics/${req.params.id} failed:`, error.message);
         res.status(500).json({ error: 'Server error' });
@@ -66,11 +74,13 @@ router.put('/:id', async (req, res) => {
 // DELETE a comic by id
 router.delete('/:id', async (req, res) => {
     try {
+        const deletedComic = await Comic.findByIdAndDelete(req.params.id);
+        if (!deletedComic) return res.status(404).json({ error: 'Comic not found' });
+        res.status(200).json({ message: 'Comic deleted successfully' });
     } catch (error) {
         logger.error(`DELETE /api/comics/${req.params.id} failed:`, error.message);
         res.status(500).json({ error: 'Server error' });
     }
 });
-
 
 module.exports = router;

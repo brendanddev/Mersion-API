@@ -4,7 +4,9 @@
 const express = require('express');
 const router = express.Router();
 const Comic = require('../models/comicModel');
-const logger = require('../utils/logger')
+const logger = require('../utils/logger');
+const comicSchema = require('../validators/comicValidator');
+const MAX_IMPORT_COUNT = 1000;
 
 // GET all comics
 router.get('/', async (req, res) => {
@@ -79,6 +81,29 @@ router.delete('/:id', async (req, res) => {
         res.status(200).json({ message: 'Comic deleted successfully' });
     } catch (error) {
         logger.error(`DELETE /api/comics/${req.params.id} failed:`, error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+router.post('/import', async (req, res) => {
+    try {
+        const { format, data } = req.body;
+        if (!format || !data) return res.status(400).json({ error: 'Format and data are required!' });
+
+        let comics = [];
+
+        if (format == 'json') {
+            if (!Array.isArray(data)) {
+                return res.status(400).json({ error: 'JSON data must be an array' });
+            }
+            comics = data;
+        } else if (format == 'csv') {
+            comics = 
+        }
+
+
+    } catch (error) {
+        logger.error(`POST /api/comics/import failed: ${error.message}`);
         res.status(500).json({ error: 'Server error' });
     }
 });

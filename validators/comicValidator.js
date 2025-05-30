@@ -4,3 +4,15 @@
 
 const Joi = require('joi');
 
+const comicSchema = Joi.object({
+    title: Joi.string().required(),
+    author: Joi.string().required(),
+    publisher: Joi.string().allow('', null),
+    issue: Joi.number().required(),
+    volume: Joi.number().required(),
+    genre: Joi.string().optional(),
+    releaseDate: Joi.date().optional(),
+    description: Joi.string().optional()
+});
+
+module.exports = comicSchema;

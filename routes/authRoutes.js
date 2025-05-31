@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
         const newUser = await User.create({ name, email, password, role: role || 'user' });
         if (!newUser) return res.status(500).json({ error: 'Failed to create user!' });
         logger.log(`New user registered: ${newUser.email}`);
-        
+
         res.status(201).json({
             id: newUser._id,
             name: newUser.name,
@@ -62,3 +62,5 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+module.exports = router;

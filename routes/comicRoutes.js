@@ -4,8 +4,10 @@
 const express = require('express');
 const router = express.Router();
 const Comic = require('../models/comicModel');
-const logger = require('../utils/logger');
+const mongoose = require('mongoose');
 const comicSchema = require('../validators/comicValidator');
+const parseCsvToJson = require('../utils/csvParser');
+const logger = require('../utils/logger');
 const MAX_IMPORT_COUNT = 1000;
 
 // GET all comics

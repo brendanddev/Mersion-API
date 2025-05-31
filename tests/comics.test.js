@@ -51,6 +51,7 @@ describe('GET /api/comics/:id', () => {
 describe('POST and DELETE /api/comics', () => {
     let createdComicId;
 
+    // Test POST to create a new comic
     it('should create a new comic', async () => {
         const newComic = {
             title: 'Test Comic',
@@ -60,6 +61,18 @@ describe('POST and DELETE /api/comics', () => {
             volume: 1,
             genre: 'Test Genre',
             releaseDate: '2025-05-31',
+        }
 
+        const response = await request(app).post('/api/comics').send(newComic);
+        expect(response.statusCode).toBe(201);
+        expect(response.body.title).toBe('Test Comic');
+        createdComicId = response.body._id;
+    });
 
+    // Test DELETE to delete the created comic
+    it('should delete the test comic', async () => {
+        const response = await request(app).delete(`/api/comics/${createdComicId}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body.message).toBe('Comic deleted successfully');
+    });
 });

@@ -175,10 +175,23 @@ router.get('/search', async (req, res) => {
     }
 });
 
-// GET to filter comics by author, volume, or date
+// GET to filter comics by author, publisher, volume, genre, or release date
 router.get('/filter', async (req, res) => {
     try {
+        const { author, publisher, volume, genre, releaseDate } = req.query;
+        const filter = {};
 
+        if (author) filter.author = new RegExp(author, 'i');
+        if (publisher) filter.publisher = new RegExp(publisher, 'i');
+        if (volume) filter.volume = parseInt(volume);
+        if (genre) filter.genre = new RegExp(genre, 'i');
+        if (releaseDate) filter.releaseDate = new Date(releaseDate);
+        logger.log(`Filtering comics with criteria: ${JSON.stringify(filter)}`);
+
+        const filteredComics = await Comic.find(filter);
+        if (filteredComics.length === 0) return res.status(404).json({ error: 'No comics found matching the filter criteria.' });
+        logger.log(`Found ${filteredComics.length} comics matching filter criteria.`);
+        res.status(200).json(filteredComics);
     } catch (error) {
         logger.error('GET /api/comics/filter failed:', error.message);
         res.status(500).json({ error: 'Server error' });

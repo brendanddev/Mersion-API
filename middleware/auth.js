@@ -1,6 +1,7 @@
 
 // auth.js
 // Middleware to authenticate user requests
+// Brendan Dileo - May 2025
 
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');

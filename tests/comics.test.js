@@ -1,6 +1,7 @@
 
 // comics.test.js
 // Uses Jest to automate testing of the comics api endpoints
+// Brendan Dileo - May 2025
 
 const request = require('supertest');
 const app = require('../app');
@@ -48,4 +49,17 @@ describe('GET /api/comics/:id', () => {
 
 // Test POST new comic and DELETE test comic
 describe('POST and DELETE /api/comics', () => {
+    let createdComicId;
+
+    it('should create a new comic', async () => {
+        const newComic = {
+            title: 'Test Comic',
+            author: 'Test Author',
+            publisher: 'Test Publisher',
+            issue: 1,
+            volume: 1,
+            genre: 'Test Genre',
+            releaseDate: '2025-05-31',
+
+
 });

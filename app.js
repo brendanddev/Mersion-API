@@ -1,6 +1,7 @@
 
 // app.js
-
+// Main Express application setup
+// Brendan Dileo - May 2025
 
 const express = require('express');
 const cors = require('cors');

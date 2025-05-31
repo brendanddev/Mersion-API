@@ -1,6 +1,7 @@
 
 // comicRoutes.js
 // Comic related routes
+// Brendan Dileo - May 2025
 
 const express = require('express');
 const router = express.Router();

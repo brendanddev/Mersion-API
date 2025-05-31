@@ -1,6 +1,7 @@
 
 // connect.js
 // Connects to mongodb using mongoose 
+// Brendan Dileo - May 2025
 
 const mongoose = require('mongoose');
 

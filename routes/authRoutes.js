@@ -1,6 +1,7 @@
 
 // authRoutes.js
 // Handles user authentication routes
+// Brendan Dileo - May 2025
 
 const express = require('express');
 const jwt = require('jsonwebtoken');

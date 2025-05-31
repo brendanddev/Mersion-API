@@ -85,6 +85,7 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// POST to bulk import comics in either json or csv
 router.post('/import', async (req, res) => {
     try {
         const { format, data } = req.body;
@@ -98,10 +99,46 @@ router.post('/import', async (req, res) => {
             }
             comics = data;
         } else if (format == 'csv') {
-            comics = 
+            comics = await parseCsvToJson(data);
+        } else {
+            return res.status(400).json({ error: 'Unsupported format. Use "json" or "csv".' });
         }
 
+        if (comics.length > MAX_IMPORT_COUNT) {
+            return res.status(400).json({ error: `Cannot import more than ${MAX_IMPORT_COUNT} comics at once.` });
+        }
 
+        const validatedComics = [];
+        const validatedErrors = [];
+
+        for (let i = 0; i < comics.length; i++) {
+            const { error, value } = comicSchema.validate(comics[i], { abortEarly: false });
+
+            if (error) {
+                validatedErrors.push({
+                    index: i,
+                    entry: comics[i],
+                    errors: error.details.map(err => err.message)
+                });
+            } else {
+                validatedComics.push(value);
+            }
+        }
+
+        if (validatedErrors.length > 0) {
+            return res.status(400).json({
+                error: 'Validation errors found',
+                details: validatedErrors
+            });
+        }
+
+        const result = await Comic.insertMany(validatedComics);
+        logger.log(`Imported ${result.length} comics successfully.`);
+        res.status(201).json({
+            message: `Imported ${result.length} comics successfully.`,
+            importedComics: result,
+            importedCount: result.length
+        });
     } catch (error) {
         logger.error(`POST /api/comics/import failed: ${error.message}`);
         res.status(500).json({ error: 'Server error' });

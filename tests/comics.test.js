@@ -76,3 +76,12 @@ describe('POST and DELETE /api/comics', () => {
         expect(response.body.message).toBe('Comic deleted successfully');
     });
 });
+
+// Test POST new comic with missing fields
+describe('POST /api/comics', () => {
+    it('should return 400 for missing required fields', async () => {
+        const incompleteComic = { title: 'Incomplete Comic' };
+        const response = await request(app).post('/api/comics').send(incompleteComic);
+        expect(response.statusCode).toBe(400);
+    });
+});

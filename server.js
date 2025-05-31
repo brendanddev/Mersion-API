@@ -1,21 +1,13 @@
 
 // server.js
 
-const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors');
-const comicRoutes = require('./routes/comicRoutes');
 const connectDB = require('./db/connect');
 const logger = require('./utils/logger');
+const app = require('./app');
 
 dotenv.config();
-const app = express();
 const port = process.env.PORT || 4001;
-
-app.use(cors());
-app.use(express.json());
-
-app.use('/api/comics', comicRoutes);
 
 connectDB().then(() => {
     app.listen(port, () => {

@@ -4,7 +4,7 @@
 
 const express = require('express');
 const cors = require('cors');
-import logger from './utils/logger.js';
+const logger = require('./utils/logger');
 const comicRoutes = require('./routes/comicRoutes');
 
 const app = express();

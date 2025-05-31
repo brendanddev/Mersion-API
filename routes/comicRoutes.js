@@ -22,8 +22,12 @@ router.get('/', async (req, res) => {
 // GET a single comic by ID
 router.get('/:id', async (req, res) => {
     try {
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(404).json({ error: 'Invalid comic ID' });
+        }
         const comic = await Comic.findById(req.params.id);
         if (!comic) return res.status(404).json({ error: 'Comic not found' });
+        logger.log(`Fetched comic with ID: ${req.params.id}`);
         res.status(200).json(comic);
     } catch (error) {
         logger.error(`GET /api/comics/${req.params.id} failed:`, error.message);

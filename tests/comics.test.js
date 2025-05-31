@@ -85,3 +85,15 @@ describe('POST /api/comics', () => {
         expect(response.statusCode).toBe(400);
     });
 });
+
+// Test PUT update comic
+describe('PUT /api/comics/:id', () => {
+});
+
+// Test GET search for comics
+describe('GET /api/comics/search', () => {
+});
+
+// Test GET filter comics
+describe('GET /api/comics/filter', () => {
+});

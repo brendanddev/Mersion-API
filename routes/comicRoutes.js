@@ -1,5 +1,6 @@
 
 // comicRoutes.js
+// Comic related routes
 
 const express = require('express');
 const router = express.Router();
@@ -42,7 +43,7 @@ router.post('/', async (req, res) => {
     try {
         const { title, author, publisher, issue, volume, genre, releaseDate, description } = req.body;
         if (!title || !author) return res.status(400).json({ error: 'Title, and author are required!' });
-
+        
         const newComic = new Comic({
             title,
             author,
@@ -170,6 +171,16 @@ router.get('/search', async (req, res) => {
 
     } catch (error) {
         logger.error('GET /api/comics/search failed:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// GET to filter comics by author, volume, or date
+router.get('/filter', async (req, res) => {
+    try {
+
+    } catch (error) {
+        logger.error('GET /api/comics/filter failed:', error.message);
         res.status(500).json({ error: 'Server error' });
     }
 });

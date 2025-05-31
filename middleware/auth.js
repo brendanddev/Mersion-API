@@ -5,7 +5,7 @@
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
 
-module.exports = (req, res, next) => {
+const protect = (req, res, next) => {
     const token = req.header('Authorization')?.split(' ')[1];
     if (!token) return res.status(401).json({ error: 'Authorization denied. No token provided.' });
 
@@ -18,3 +18,5 @@ module.exports = (req, res, next) => {
         return res.status(401).json({ error: 'Token is not valid.' });
     }
 }
+
+module.exports = protect;

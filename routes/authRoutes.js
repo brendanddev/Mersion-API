@@ -18,12 +18,15 @@ const generateToken = (user) => {
 // POST to register a new user
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
         if (!name || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required!' });
         const exists = await User.findOne({ email });
         if (exists) return res.status(400).json({ error: 'User already exists with this email!' });
 
-        const newUser = await User.create({ name, email, password });
+        const newUser = await User.create({ name, email, password, role: role || 'user' });
+        if (!newUser) return res.status(500).json({ error: 'Failed to create user!' });
+        logger.log(`New user registered: ${newUser.email}`);
+        
         res.status(201).json({
             id: newUser._id,
             name: newUser.name,

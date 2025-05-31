@@ -154,6 +154,20 @@ router.post('/import', async (req, res) => {
 // GET to search comics by title, author, or genre
 router.get('/search', async (req, res) => {
     try {
+        const query = {};
+        if (req.query.title) query.title = new RegExp(req.query.title, 'i');
+        if (req.query.author) query.author = new RegExp(req.query.author, 'i');
+        if (req.query.genre) query.genre = new RegExp(req.query.genre, 'i');
+        logger.log(`Searching comics with query: ${JSON.stringify(query)}`);
+
+        const comicResults = await Comic.find(query);
+        if (comicResults.length === 0) return res.status(404).json({ error: 'No comics found matching the search criteria.' });
+        
+        
+        
+        logger.log(`Found ${comicResults.length} comics matching search criteria.`);
+        res.status(200).json(comicResults);
+
     } catch (error) {
         logger.error('GET /api/comics/search failed:', error.message);
         res.status(500).json({ error: 'Server error' });

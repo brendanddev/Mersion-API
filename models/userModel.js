@@ -5,6 +5,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+// User schema definition
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -21,6 +22,7 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
+// Compare against hashed password
 userSchema.methods.comparePassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 }

@@ -1,6 +1,7 @@
 
 // comicValidator.js
 // Validates comic data for creating or updating comics
+// Brendan Dileo - May 2025
 
 const Joi = require('joi');
 

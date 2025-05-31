@@ -1,5 +1,6 @@
 
 // comics.test.js
+// Uses Jest to automate testing of the comics api endpoints
 
 const request = require('supertest');
 const app = require('../app');
@@ -25,4 +26,22 @@ describe('GET /api/comics', () => {
     expect(response.statusCode).toBe(200);
     expect(Array.isArray(response.body)).toBe(true);
   });
+});
+
+// Test GET by id
+describe('GET /api/comics/:id', () => {
+    // test valid comic id
+    const testComicId = '683a4f80d1a628cc58400b84';
+    it('should return a comic by ID', async () => {
+        const response = await request(app).get(`/api/comics/${testComicId}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body._id).toBe(testComicId);
+    });
+
+    // test invalid comic id
+    it('should return 404 for non-existent ID', async () => {
+        const badId = '00000000000000000';
+        const response = await request(app).get(`/api/comics/${badId}`);
+        expect(response.statusCode).toBe(404);
+    });
 });

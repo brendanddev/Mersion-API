@@ -45,3 +45,7 @@ describe('GET /api/comics/:id', () => {
         expect(response.statusCode).toBe(404);
     });
 });
+
+// Test POST new comic and DELETE test comic
+describe('POST and DELETE /api/comics', () => {
+});

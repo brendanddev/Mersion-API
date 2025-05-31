@@ -40,6 +40,20 @@ router.post('/register', async (req, res) => {
 // POST to login a user
 router.post('/login', async (req, res) => {
     try {
+        const { email, password } = req.body;
+        if (!email || !password) return res.status(400).json({ error: 'Email and password are required!' });
+        const user = await User.findOne({ email });
+
+        if (!user || !(user.comparePassword(password)))
+            return res.status(401).json({ error: 'Invalid crdentials!' });
+        
+        res.json({
+            id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            token: generateToken(user),
+        });
     } catch (error) {
         logger.error('POST /api/auth/login failed:', error.message);
         res.status(500).json({ error: 'Server error' });

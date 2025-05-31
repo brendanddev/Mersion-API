@@ -151,4 +151,13 @@ router.post('/import', async (req, res) => {
     }
 });
 
+// GET to search comics by title, author, or genre
+router.get('/search', async (req, res) => {
+    try {
+    } catch (error) {
+        logger.error('GET /api/comics/search failed:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 module.exports = router;

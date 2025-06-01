@@ -2,6 +2,10 @@
 
 APIssues is a Comic REST API I'm working on.
 
+## Features
+
+## Usage
+
 ## Version History
 | Version        | Month       | Description  |
 | -------------  | ----------- | -----------  |

@@ -1,6 +1,6 @@
 {
   "name": "apissues-comics",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A REST Comic API",
   "homepage": "https://github.com/brendanddev/APIssues-Comics#readme",
   "bugs": {

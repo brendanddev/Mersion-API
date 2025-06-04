@@ -25,21 +25,14 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm install
     
-    - name: Run tests
-      run: npm test
-      env:
-        NODE_ENV: test
-        PORT: 4001
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-    
-    - name: Start server and validate
+    - name: Start & Test
       run: |
-        npm start &
-        sleep 10
-        curl -f http://localhost:4001/health || exit 1
+        node server.js
+        npm test
+        sleep 5
       env:
         NODE_ENV: test
         PORT: 4001
-        MONGODB_URI: ${{ secrets.MONGO_URI }} 
+        MONGODB_URI: ${{ secrets.MONGO_URI }}

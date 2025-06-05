@@ -21,3 +21,10 @@ afterAll(async () => {
 });
 
 // Test basic GET
+describe('GET /api/v2/comics', () => {
+    it('should return a list of comics', async () => {
+        const response = await request(app).get('/api/v2/comics');
+        expect(response.statusCode).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+    });
+});

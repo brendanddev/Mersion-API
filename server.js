@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5001;
 
 connectDB().then(() => {
     app.listen(PORT, () => {
-        logger.log(`Server running at http://localhost:${PORT}`);
+        logger.log(`Server running at http://localhost:${PORT}/api/v2/comics`);
     });
 }).catch((error) => {
     logger.error(`Failed to start server: ${error.message}`);

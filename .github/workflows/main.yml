@@ -28,7 +28,7 @@ jobs:
 
     - name: Start server and run tests
       run: |
-        npm start &
+        node server.js &
         sleep 5
         npm test
       env:

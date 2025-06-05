@@ -9,37 +9,35 @@ on:
 jobs:
   test-and-validate:
     runs-on: ubuntu-latest
-    services:
-      mongodb:
-        image: mongo:4.4
-        ports:
-          - 27017:27017
-        options: >-
-          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
 
     strategy:
       matrix:
         node-version: [18.x]
+        mongodb-version: ['4.4']
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: Install dependencies
-      run: npm install
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
 
-    - name: Start server and run tests
-      run: |
-        node server.js &
-        sleep 5
-        npm test
-      env:
-        NODE_ENV: test
-        PORT: 4001
-        MONGODB_URI: mongodb://localhost:27017/comicsdb
-        
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start server and run tests
+        run: |
+          node server.js &
+          sleep 5
+          npm test
+        env:
+          NODE_ENV: test
+          PORT: 4000
+          MONGO_URI: mongodb://localhost:27017/comicsdb

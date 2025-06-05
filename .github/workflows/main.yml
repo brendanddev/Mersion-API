@@ -1,4 +1,3 @@
-
 name: GH Actions Test Pipeline
 
 on:
@@ -17,21 +16,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    
+
     - name: Install dependencies
       run: npm install
-    
-    - name: Start & Test
+
+    - name: Start server and run tests
       run: |
-        node server.js
-        npm test
+        npm start &
         sleep 5
+        npm test
       env:
         NODE_ENV: test
         PORT: 4001

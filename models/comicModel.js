@@ -12,6 +12,7 @@ const comicSchema = new mongoose.Schema({
     publisher: String,
     issue: { type: Number, required: true },
     volume: { type: Number, required: true },
+    coverVariant: String,
     genre: String,
     releaseDate: Date,
     condition: {
@@ -20,6 +21,8 @@ const comicSchema = new mongoose.Schema({
         default: 'Fine',
     },
     isRead: { type: Boolean, default: false },
+    purchasePrice: Number,
+    currentValue: Number,
     notes: String
 }, {
     timestamps: true

@@ -11,12 +11,15 @@ const comicSchema = Joi.object({
     publisher: Joi.string().allow(null, ''),
     issue: Joi.number().integer().required(),
     volume: Joi.number().integer().required(),
+    coverVariant: Joi.string().allow(null, ''),
     genre: Joi.string().allow(null, ''),
     releaseDate: Joi.date().iso().allow(null),
     condition: Joi.string()
         .valid('Mint', 'Near Mint', 'Very Fine', 'Fine', 'Good', 'Fair', 'Poor')
         .default('Fine'),
     isRead: Joi.boolean().default(false),
+    purchasePrice: Joi.number().allow(null),
+    currentValue: Joi.number().allow(null),
     notes: Joi.string().allow(null, '')
 });
 

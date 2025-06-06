@@ -78,6 +78,28 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+// POST bulk create comics in the db
+router.post('/bulk', auth, async (req, res) => {
+
+    const { error, value } = comicSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+        logger.warn(`Validation failed for POST /api/v2/comics/bulk: ${error.message}`);
+        return res.status(400).json({ message: 'Validation error', details: error.details });
+    }
+
+    const comics = req.body.comics;
+    if (!Array.isArray(comics) || comics.length === 0) return res.status(400).json({ message: 'No comics provided for bulk creation!' });
+
+    try {
+        const insertedComics = await Comic.insertMany(comics);
+        logger.log(`Bulk created ${insertedComics.length} comics`);
+        res.status(201).json({ message: 'Comics created successfully', comics: insertedComics });
+    } catch (error) {
+        logger.error(`POST /api/v2/comics/bulk failed: ${error.message}`);
+        res.status(500).json({ message: 'Failed to create comics in bulk!' });
+    }
+});
+
 // PUT update a comic by id
 router.put('/:id', auth, async (req, res) => {
     try {

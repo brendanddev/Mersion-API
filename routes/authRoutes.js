@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/userModel');
 const logger = require('../utils/logger');
+const { validateRegistration } = require('../validators/userValidator');
 
 // Generates jwt token for a user
 const generateToken = (user) => {
@@ -20,12 +21,15 @@ const generateToken = (user) => {
 // POST to register a new user
 router.post('/register', async (req, res) => {
     try {
-        const { username, email, password, role } = req.body;
-        if (!username || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required!' });
+        const { username, email, password } = req.body;
+
+        const errors = validateRegistration({ username, email, password });
+        if (errors.length > 0) return res.status(400).json({ error: errors.join(' ') });
+
         const exists = await User.findOne({ email });
         if (exists) return res.status(400).json({ error: 'User already exists with this email!' });
 
-        const newUser = await User.create({ username, email, password, role: role || 'user' });
+        const newUser = await User.create({ username, email, password });
         if (!newUser) return res.status(500).json({ error: 'Failed to create user!' });
         logger.log(`New user registered: ${newUser.email}`);
 
@@ -50,7 +54,7 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user || !(user.comparePassword(password)))
-            return res.status(401).json({ error: 'Invalid crdentials!' });
+            return res.status(401).json({ error: 'Invalid credentials!' });
         
         res.json({
             id: user._id,

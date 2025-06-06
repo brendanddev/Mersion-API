@@ -6,6 +6,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const limiter = require('./middleware/rateLimiter');
 const comicRoutes = require('./routes/comicRoutes');
 const logger = require('./utils/logger');
 
@@ -15,6 +16,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
+app.use(limiter);
 
 app.use('/api/v2/comics', comicRoutes);
 

@@ -6,6 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const auth = require('../middleware/auth');
 const Comic = require('../models/comicModel');
 const comicSchema = require('../validators/comicValidator');
 const logger = require('../utils/logger');
@@ -41,7 +42,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST a new comic
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     // Validate incoming comic data, dont stop on first error
     const { error, value } = comicSchema.validate(req.body, { abortEarly: false });
 
@@ -78,7 +79,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT update a comic by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', auth, async (req, res) => {
     try {
         // Check if id is valid
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -102,7 +103,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE a comic by id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', auth, async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(404).json({ error: 'Invalid comic ID' });

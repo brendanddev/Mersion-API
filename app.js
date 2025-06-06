@@ -8,6 +8,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const limiter = require('./middleware/rateLimiter');
 const comicRoutes = require('./routes/comicRoutes');
+const authRoutes = require('./routes/authRoutes');
 const logger = require('./utils/logger');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(limiter);
 app.use('/api/v2/comics', comicRoutes);
+app.use('/api/v2/auth', authRoutes);
 
 // Fallback for undefined routes
 app.use((req, res) => {

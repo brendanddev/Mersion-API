@@ -8,7 +8,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const limiter = require('./middleware/rateLimiter');
 const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
 const comicRoutes = require('./routes/comicRoutes');
 const logger = require('./utils/logger');
 
@@ -20,7 +19,6 @@ app.use(express.json());
 app.use(helmet());
 app.use(limiter);
 app.use(mongoSanitize());
-app.use(xss());
 app.use('/api/v2/comics', comicRoutes);
 
 // Fallback for undefined routes

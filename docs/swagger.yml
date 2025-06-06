@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: APIssues Comic API
+  version: 1.0.0
+  description: A RESTful API to manage comic book collections
+
+servers:
+  - url: http://localhost:5000/api/v2
+
+paths:
+  /comics:
+    get:
+      summary: Get all comics
+      tags:
+        - Comics
+      responses:
+        '200':
+          description: A list of comics
+    post:
+      summary: Add a new comic (auth required)
+      tags:
+        - Comics
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comic'
+      responses:
+        '201':
+          description: Comic created
+
+  /comics/{id}:
+    delete:
+      summary: Delete a comic by ID (auth required)
+      tags:
+        - Comics
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Comic deleted
+
+components:
+  schemas:
+    Comic:
+      type: object
+      required:
+        - title
+        - issue
+        - volume
+      properties:
+        title:
+          type: string
+        issue:
+          type: string
+        volume:
+          type: string
+        author:
+          type: string
+        publisher:
+          type: string
+        genre:
+          type: string
+        releaseDate:
+          type: string
+          format: date
+        condition:
+          type: string
+        isRead:
+          type: boolean
+        notes:
+          type: string

@@ -7,6 +7,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
+const comicSchema = require('../validators/comicValidator');
 const logger = require('../utils/logger');
 
 // GET all comics
@@ -41,6 +42,14 @@ router.get('/:id', async (req, res) => {
 
 // POST a new comic
 router.post('/', async (req, res) => {
+    // Validate incoming comic data, dont stop on first error
+    const { error, value } = comicSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+        logger.warn(`Validation failed for POST /api/v2/comics: ${error.message}`);
+        return res.status(400).json({ message: 'Validation error', details: error.details });
+    }
+
     try {
         const { title, author, publisher, issue, volume, genre, releaseDate, condition, isRead, notes } = req.body;
         if (!title || !issue || !volume) 

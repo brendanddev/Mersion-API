@@ -11,6 +11,8 @@ const comicRoutes = require('./routes/comicRoutes');
 const authRoutes = require('./routes/authRoutes');
 const logger = require('./utils/logger');
 
+const setupSwaggerDocs = require('./middleware/swagger');
+
 const app = express();
 
 // Middleware
@@ -20,6 +22,7 @@ app.use(helmet());
 app.use(limiter);
 app.use('/api/v2/comics', comicRoutes);
 app.use('/api/v2/auth', authRoutes);
+setupSwaggerDocs(app);
 
 // Fallback for undefined routes
 app.use((req, res) => {

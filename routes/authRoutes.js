@@ -25,7 +25,7 @@ router.post('/register', async (req, res) => {
         const exists = await User.findOne({ email });
         if (exists) return res.status(400).json({ error: 'User already exists with this email!' });
 
-        const newUser = await User.create({ name, email, password, role: role || 'user' });
+        const newUser = await User.create({ username, email, password, role: role || 'user' });
         if (!newUser) return res.status(500).json({ error: 'Failed to create user!' });
         logger.log(`New user registered: ${newUser.email}`);
 
@@ -37,6 +37,7 @@ router.post('/register', async (req, res) => {
         });
     } catch (error) {
         logger.error('POST /api/auth/register failed:', error.message);
+        console.error(`Error registering user: ${error.message}`);
         res.status(500).json({ error: 'Server error' });
     }
 });

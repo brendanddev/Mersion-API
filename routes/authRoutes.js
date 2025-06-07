@@ -78,9 +78,29 @@ router.post('/login', async (req, res) => {
             role: user.role,
             token: accessToken,
         });
-        
+
     } catch (error) {
         logger.error('POST /api/auth/login failed:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// POST to logout a user by clearing refresh token inside cookie
+router.post('/logout', (req, res) => {
+    try {
+
+    } catch (error) {
+        logger.error('POST /api/auth/logout failed:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// POST to refresh token by generating new access token
+router.post('/refresh', async (req, res) => {
+    try {
+
+    } catch (error) {
+        logger.error('POST /api/auth/refresh failed:', error.message);
         res.status(500).json({ error: 'Server error' });
     }
 });

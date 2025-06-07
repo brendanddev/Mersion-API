@@ -86,13 +86,14 @@ router.post('/login', async (req, res) => {
 });
 
 // POST to logout a user by clearing refresh token inside cookie
-router.post('/logout', async (req, res) => {
-    try {
-
-    } catch (error) {
-        logger.error('POST /api/auth/logout failed:', error.message);
-        res.status(500).json({ error: 'Server error' });
-    }
+router.post('/logout', (req, res) => {
+    res.clearCookie('refreshToken', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', 
+        sameSite: 'Strict',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+    logger.log('User logged out and refresh token cleared');
 });
 
 // POST to refresh token by generating new access token

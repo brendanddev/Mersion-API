@@ -10,6 +10,7 @@ const limiter = require('./middleware/rateLimiter');
 const comicRoutes = require('./routes/comicRoutes');
 const authRoutes = require('./routes/authRoutes');
 const logger = require('./utils/logger');
+const cookieParser = require('cookie-parser');
 
 const setupSwaggerDocs = require('./middleware/swagger');
 
@@ -20,6 +21,7 @@ app.use(cors());
 app.use(express.json());
 app.use(helmet());
 app.use(limiter);
+app.use(cookieParser());
 app.use('/api/v2/comics', comicRoutes);
 app.use('/api/v2/auth', authRoutes);
 setupSwaggerDocs(app);

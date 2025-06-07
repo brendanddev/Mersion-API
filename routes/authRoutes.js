@@ -10,13 +10,7 @@ const router = express.Router();
 const User = require('../models/userModel');
 const logger = require('../utils/logger');
 const { validateRegistration } = require('../validators/userValidator');
-
-// Generates jwt token for a user
-const generateToken = (user) => {
-    return jwt.sign({ id: user._id }, process.env.JWT_TOKEN, {
-        expiresIn: '1d',
-    });
-}
+const { generateAccessToken, generateRefreshToken } = require('../utils/token');
 
 // POST to register a new user
 router.post('/register', async (req, res) => {
@@ -33,12 +27,23 @@ router.post('/register', async (req, res) => {
         if (!newUser) return res.status(500).json({ error: 'Failed to create user!' });
         logger.log(`New user registered: ${newUser.email}`);
 
+        const accessToken = generateAccessToken(newUser);
+        const refreshToken = generateRefreshToken(newUser);
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: 'Strict', 
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+        });
+
         res.status(201).json({
             id: newUser._id,
             username: newUser.username,
             email: newUser.email,
-            token: generateToken(newUser),
+            token: accessToken,
         });
+
     } catch (error) {
         logger.error('POST /api/auth/register failed:', error.message);
         console.error(`Error registering user: ${error.message}`);
@@ -51,18 +56,29 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) return res.status(400).json({ error: 'Email and password are required!' });
+        
         const user = await User.findOne({ email });
-
         if (!user || !(user.comparePassword(password)))
             return res.status(401).json({ error: 'Invalid credentials!' });
+
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: 'Strict', 
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+        });
         
         res.json({
             id: user._id,
             name: user.name,
             email: user.email,
             role: user.role,
-            token: generateToken(user),
+            token: accessToken,
         });
+        
     } catch (error) {
         logger.error('POST /api/auth/login failed:', error.message);
         res.status(500).json({ error: 'Server error' });

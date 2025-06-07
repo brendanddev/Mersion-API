@@ -131,6 +131,17 @@ router.post('/refresh', async (req, res) => {
             return res.status(404).json({ error: 'User not found' });
 
         const accessToken = generateAccessToken(user);
+        const newRefreshToken = generateRefreshToken(user);
+        user.refreshToken = newRefreshToken;
+        await user.save();
+
+        res.cookie('refreshToken', newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', 
+            sameSite: 'Strict', 
+            maxAge: 30 * 24 * 60 * 60 * 500,
+        });
+
         res.json({ accessToken });
         logger.log(`Access token refreshed for user: ${user.email}`);
         // res.clearCookie('refreshToken');

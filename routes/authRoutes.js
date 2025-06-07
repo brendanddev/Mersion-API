@@ -30,6 +30,9 @@ router.post('/register', async (req, res) => {
         const accessToken = generateAccessToken(newUser);
         const refreshToken = generateRefreshToken(newUser);
 
+        newUser.refreshToken = refreshToken;
+        await newUser.save();
+
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', 
@@ -64,6 +67,10 @@ router.post('/login', async (req, res) => {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
+        user.refreshToken = refreshToken;
+        await user.save();
+        logger.log(`Logging ${user.email} in...`);
+
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production', 
@@ -73,7 +80,7 @@ router.post('/login', async (req, res) => {
         
         res.json({
             id: user._id,
-            name: user.name,
+            username: user.username,
             email: user.email,
             role: user.role,
             token: accessToken,
@@ -86,14 +93,30 @@ router.post('/login', async (req, res) => {
 });
 
 // POST to logout a user by clearing refresh token inside cookie
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
+    const token = req.cookies.refreshToken;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+            const user = await User.findById(decoded.id);
+            if (user) {
+                user.refreshToken = null;
+                await user.save();
+                logger.log(`User ${user.email} logged out and refresh token cleared`);
+            }
+        } catch (error) {
+            logger.error('POST /api/auth/logout failed:', error.message);
+            return res.status(500).json({ error: 'Logout Failed: Invalid or expired refresh token provided.' });
+        }
+    }
+
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', 
         sameSite: 'Strict',
     });
     res.status(200).json({ message: 'Logged out successfully' });
-    logger.log('User logged out and refresh token cleared');
+    logger.log(`User logged out and refresh token cleared`);
 });
 
 // POST to refresh token by generating new access token
@@ -104,15 +127,13 @@ router.post('/refresh', async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
         const user = await User.findById(decoded.id);
-        if (!user) return res.status(404).json({ error: 'User not found' });
+        if (!user || user.refreshToken !== token) 
+            return res.status(404).json({ error: 'User not found' });
 
         const accessToken = generateAccessToken(user);
         res.json({ accessToken });
         logger.log(`Access token refreshed for user: ${user.email}`);
         // res.clearCookie('refreshToken');
-
-
-
     } catch (error) {
         logger.error('POST /api/auth/refresh failed:', error.message);
         res.status(500).json({ error: 'Server error' });

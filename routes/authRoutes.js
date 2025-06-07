@@ -86,8 +86,17 @@ router.post('/login', async (req, res) => {
 });
 
 // POST to logout a user by clearing refresh token inside cookie
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
+    const token = req.cookies.refreshToken;
+    if (!token) return res.status(401).json({ error: 'No refresh token provided' });
+
     try {
+        const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        const user = await User.findById(decoded.id);
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+
+
 
     } catch (error) {
         logger.error('POST /api/auth/logout failed:', error.message);

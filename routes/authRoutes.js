@@ -11,6 +11,7 @@ const User = require('../models/userModel');
 const logger = require('../utils/logger');
 const { validateRegistration } = require('../validators/userValidator');
 const { generateAccessToken, generateRefreshToken } = require('../utils/token');
+const RefreshToken = require('../models/refreshTokenModel');
 
 // POST to register a new user
 router.post('/register', async (req, res) => {
@@ -28,10 +29,9 @@ router.post('/register', async (req, res) => {
         logger.log(`New user registered: ${newUser.email}`);
 
         const accessToken = generateAccessToken(newUser);
-        const refreshToken = generateRefreshToken(newUser);
+        const { token: refreshToken, jti } = generateRefreshToken(newUser);
 
-        newUser.refreshToken = refreshToken;
-        await newUser.save();
+        await RefreshToken.create({ userId: newUser._id, jti });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -65,10 +65,10 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials!' });
 
         const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
+        const { token: refreshToken, jti } = generateRefreshToken(user);
 
-        user.refreshToken = refreshToken;
-        await user.save();
+        await RefreshToken.create({ userId: user._id, jti });
+
         logger.log(`Logging ${user.email} in...`);
 
         res.cookie('refreshToken', refreshToken, {
@@ -98,12 +98,11 @@ router.post('/logout', async (req, res) => {
     if (token) {
         try {
             const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-            const user = await User.findById(decoded.id);
-            if (user) {
-                user.refreshToken = null;
-                await user.save();
-                logger.log(`User ${user.email} logged out and refresh token cleared`);
-            }
+            await RefreshToken.findOneAndUpdate(
+                { userId: decoded.id, jti: decoded.jti },
+                { revoked: true }
+            );
+            logger.log(`User ${decoded.id} logged out and refresh token cleared`);
         } catch (error) {
             logger.error('POST /api/auth/logout failed:', error.message);
             return res.status(500).json({ error: 'Logout Failed: Invalid or expired refresh token provided.' });
@@ -126,14 +125,27 @@ router.post('/refresh', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+        
+        const existingToken = await RefreshToken.findOne({
+            userId: decoded.id,
+            jti: decoded.jti,
+            revoked: false
+        });
+
+        if (!existingToken) {
+            logger.error(`Refresh token for user ${decoded.id} is invalid or revoked`);
+            return res.status(401).json({ error: 'Invalid or revoked refresh token' });
+        }
+
+        existingToken.revoked = true;
+        await existingToken.save();
+
         const user = await User.findById(decoded.id);
-        if (!user || user.refreshToken !== token) 
-            return res.status(404).json({ error: 'User not found' });
+        if (!user) return res.status(404).json({ error: 'User not found' });
 
         const accessToken = generateAccessToken(user);
-        const newRefreshToken = generateRefreshToken(user);
-        user.refreshToken = newRefreshToken;
-        await user.save();
+        const { token: newRefreshToken, jti } = generateRefreshToken(user);
+        await RefreshToken.create({ userId: user._id, jti });
 
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,

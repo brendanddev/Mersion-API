@@ -27,7 +27,17 @@ const conditionalAuth = async (req, res, next) => {
 
     // Find target user
     const userId = req.user?._id || req.query.userId || req.body.userId;
+    if (!userId) {
+        logger.log('No user ID provided for conditional authentication');
+        return res.status(400).json({ error: 'User ID is required for conditional authentication' });
+    }
+
     const targetUser = userId && await User.findById(userId).select('authEnabled');
+
+    if (!targetUser) {
+        logger.warn(`User not found for ID: ${userId}`);
+        return res.status(404).json({ error: 'User not found' });
+    }
 
     if (targetUser?.authEnabled) {
         return res.status(401).json({ error: 'Authentication required for this user' });

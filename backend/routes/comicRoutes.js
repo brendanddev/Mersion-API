@@ -10,6 +10,7 @@ const auth = require('../middleware/auth');
 const Comic = require('../models/comicModel');
 const comicSchema = require('../validators/comicValidator');
 const logger = require('../utils/logger');
+const conditionalAuth = require('../middleware/conditionalAuth');
 
 // GET all comics
 router.get('/', async (req, res) => {
@@ -42,7 +43,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST a new comic
-router.post('/', auth, async (req, res) => {
+router.post('/', conditionalAuth, async (req, res) => {
     // Validate incoming comic data, dont stop on first error
     const { error, value } = comicSchema.validate(req.body, { abortEarly: false });
 
@@ -79,7 +80,7 @@ router.post('/', auth, async (req, res) => {
 });
 
 // POST bulk create comics in the db
-router.post('/bulk', auth, async (req, res) => {
+router.post('/bulk', conditionalAuth, async (req, res) => {
 
     const comics = req.body.comics;
     if (!Array.isArray(comics) || comics.length === 0) return res.status(400).json({ message: 'No comics provided for bulk creation!' });
@@ -114,7 +115,7 @@ router.post('/bulk', auth, async (req, res) => {
 });
 
 // PUT update a comic by id
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', conditionalAuth, async (req, res) => {
     try {
         // Check if id is valid
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -138,7 +139,7 @@ router.put('/:id', auth, async (req, res) => {
 });
 
 // DELETE a comic by id
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', conditionalAuth, async (req, res) => {
     try {
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
             return res.status(404).json({ error: 'Invalid comic ID' });

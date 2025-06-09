@@ -12,6 +12,7 @@ const logger = require('../utils/logger');
 const { validateRegistration } = require('../validators/userValidator');
 const { generateAccessToken, generateRefreshToken } = require('../utils/token');
 const RefreshToken = require('../models/refreshTokenModel');
+const auth = require('../middleware/auth');
 
 // POST to register a new user
 router.post('/register', async (req, res) => {
@@ -163,7 +164,7 @@ router.post('/refresh', async (req, res) => {
     }
 });
 
-router.post('/toggle-auth', async (req, res) => {
+router.post('/toggle-auth', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user._id);
         user.authEnabled = !user.authEnabled;

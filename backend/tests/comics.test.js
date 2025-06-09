@@ -20,11 +20,18 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-// Test basic GET
+// Test basic GET and GET by id
 describe('GET /api/v2/comics', () => {
+    // Basic GET test
     it('should return a list of comics', async () => {
         const response = await request(app).get('/api/v2/comics');
         expect(response.statusCode).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
+    });
+    
+    it('should return a single comic by id', async () => {
+        const response = await request(app).get('/api/v2/comics/');
+        
+
     });
 });

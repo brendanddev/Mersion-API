@@ -29,9 +29,10 @@ describe('GET /api/v2/comics', () => {
         expect(Array.isArray(response.body)).toBe(true);
     });
     
+    // GET by id test, expected to return a 404
     it('should return a single comic by id', async () => {
-        const response = await request(app).get('/api/v2/comics/');
-        
-
+        const badId = '123456789123456789';
+        const response = await request(app).get(`/api/v2/comics/${badId}`);
+        expect(response.statusCode).toBe(404);
     });
 });

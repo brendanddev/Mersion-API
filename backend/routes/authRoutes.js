@@ -165,7 +165,11 @@ router.post('/refresh', async (req, res) => {
 
 router.post('/toggle-auth', async (req, res) => {
     try {
-
+        const user = await User.findById(req.user._id);
+        user.authEnabled = !user.authEnabled;
+        await user.save();
+        logger.log(`User ${user.email} authentication toggled to ${user.authEnabled}`);
+        res.status(200).json({ message: `Auth protection is now ${user.authEnabled ? 'ENABLED' : 'DISABLED'}` });
     } catch (error) {
         logger.error('POST /api/auth/toggle-auth failed:', error.message);
         res.status(500).json({ error: 'Server error' });

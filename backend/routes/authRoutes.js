@@ -163,4 +163,13 @@ router.post('/refresh', async (req, res) => {
     }
 });
 
+router.post('/toggle-auth', async (req, res) => {
+    try {
+
+    } catch (error) {
+        logger.error('POST /api/auth/toggle-auth failed:', error.message);
+        res.status(500).json({ error: 'Server error' });
+    }
+})
+
 module.exports = router;

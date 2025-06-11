@@ -7,7 +7,7 @@ const express = require('express');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
 
-// Creates the express router
+// Creates an instance of the express router
 const router = express.Router();
 
 // GET all comics
@@ -77,7 +77,19 @@ router.put('/:id', (req, res) => {
 });
 
 // DELETE a comic by id
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
+    const { id } = req.body;
+
+    try {
+        const deletedComic = await Comic.findByIdAndDelete(id);
+        if (!deletedComic) return res.status(404).json({ message: 'Comic not found!' });
+
+        logger.log(`Comic Deleted Successfully!`);
+        return res.status(200).json({ message: 'Comic deleted successfully!', comic: deletedComic });
+    } catch (error) {
+        logger.error(`An error occurred while deleting the comic: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
 });
 
 module.exports = router;

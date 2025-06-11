@@ -1,5 +1,7 @@
 
 // app.js
+// Creates and configures the express app
+// Brendan Dileo, June 2025
 
 const express = require('express');
 const cors = require('cors');

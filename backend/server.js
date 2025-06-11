@@ -1,5 +1,7 @@
 
 // server.js
+// Starts the http server and connects to the database
+// Brendan Dileo, June 2025
 
 require('dotenv').config();
 const app = require('./app');

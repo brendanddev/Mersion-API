@@ -22,6 +22,20 @@ router.get('/', async (req, res) => {
     }
 });
 
+// GET a comic by id
+router.get('/:id', async (req, res) => {
+    // Extract id from request params
+    const { id } = req.params;
+    try {
+        const comic = await Comic.findById(id);
+        logger.log(`Comic fetched from database!`);
+        return res.status(200).json({ comic: comic });
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
 // POST a comic
 router.post('/', async (req, res) => {
     const {

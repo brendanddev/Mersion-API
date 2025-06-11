@@ -4,6 +4,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 
 // Creates the app
 const app = express();
@@ -14,6 +15,7 @@ console.log(process.env.PORT);
 // Basic middleware
 app.use(cors());
 app.use(express.json());
+app.use(helmet());
 
 // Basic GET route
 app.get('/', (req, res) => {

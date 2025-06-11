@@ -11,4 +11,4 @@ Store your own collection, virtually.
 | Version        | Month       | Description  |
 | -------------  | ----------- | -----------  |
 | 1.0.0          | May 2025    |              |
-| 2.0.0          | June 2025   |              | 
+| 1.1.0          | June 2025   |              | 

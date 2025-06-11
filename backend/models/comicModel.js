@@ -11,6 +11,7 @@ const comicSchema = new mongoose.Schema({
     issue: { type: Number, required: true },
     volume: { type: Number, required: true },
     publisher: String,
+    coverVariant: String,
     releaseDate: Date,
     rating: { type: Number, min: 1, max: 10 },
     purchasePrice: Number,

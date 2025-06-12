@@ -1,5 +1,4 @@
 
-
 openapi: 3.0.0
 info:
   title: API
@@ -11,8 +10,30 @@ servers:
 
 paths:
   /comics:
+    # Get all comics
     get:
       summary: Get all comics
       responses:
         '200':
           description: A list of all saved comics
+    # Add a comic
+    post:
+      summary: Create a new comic
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                author: 
+                  type: string
+                issue:
+                  type: number
+                volume:
+                  type: number
+      responses:
+        '201':
+          description: Comic created

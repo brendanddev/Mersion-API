@@ -8,6 +8,10 @@ const cors = require('cors');
 const helmet = require('helmet');
 const comicRoutes = require('./routes/comicRoutes');
 
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDoc = YAML.load('./docs/swagger.yml');
+
 // Creates the app
 const app = express();
 
@@ -18,5 +22,6 @@ app.use(helmet());
 
 app.get('/', (req, res) => res.send('Server up and running...'));
 app.use('/comics', comicRoutes);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 module.exports = app;

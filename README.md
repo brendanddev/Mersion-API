@@ -1,7 +1,6 @@
 # APIssues Comics
 
-APIssues is a Comic REST API I'm working on.
-Store your own collection, virtually.
+A personal storage collection.
 
 ## Features
 

@@ -1,2 +1,33 @@
+
+# Node.js
 node_modules/
 .env
+npm-debug.log*
+
+# Gradle build output
+.gradle/
+build/
+out/
+
+# Maven build output
+target/
+
+# Gradle wrapper cache
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# JetBrains default
+/shelf/
+/workspace.xml

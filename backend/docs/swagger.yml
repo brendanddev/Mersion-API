@@ -16,6 +16,7 @@ paths:
       responses:
         '200':
           description: A list of all saved comics
+    
     # Add a comic
     post:
       summary: Create a new comic
@@ -25,6 +26,11 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+                - title
+                - author
+                - issue
+                - volume
               properties:
                 title:
                   type: string
@@ -32,8 +38,47 @@ paths:
                   type: string
                 issue:
                   type: number
+                  minimum: 1
                 volume:
                   type: number
+                  minimum: 1
+                publisher:
+                  type: string
+                coverVariant:
+                  type: string
+                releaseDate:
+                  type: string
+                  format: date
+                rating:
+                  type: number
+                  minimum: 1
+                  maximum: 10
+                purchasePrice:
+                  type: number
+                currentValue:
+                  type: number
+                condition:
+                  type: string
+                  enum: 
+                    - Near Mint
+                    - Very Fine
+                    - Fine
+                    - Very Good
+                    - Good
+                    - Fair
+                    - Poor
+                  default: Good
+                isRead:
+                  type: boolean
+                  default: false
+                genre:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                notes:
+                  type: string
       responses:
         '201':
           description: Comic created

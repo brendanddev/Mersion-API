@@ -89,10 +89,10 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT to update a comic by id -- test to see if patch is needed
+// PUT to update a comic by id
 router.put('/:id', async (req, res) => {
     try {
-        // Shortform no reassign for every field - 
+        // Shortform no reassign for every field
         const updatedComic = await Comic.findByIdAndUpdate(
             // Extracts id from url params
             // Uses 'req.body' to update only the fields sent in the request

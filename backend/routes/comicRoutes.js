@@ -38,6 +38,7 @@ router.get('/:id', async (req, res) => {
 
 // POST a comic
 router.post('/', async (req, res) => {
+    // Comic data in request body
     const {
         title,
         author,
@@ -55,12 +56,14 @@ router.post('/', async (req, res) => {
         notes
     } = req.body;
 
+    // Basic validation
     if (!title || !author || !issue || !volume) {
         logger.error('One of the required fields are missing!');
         return res.status(400).json({ message: 'Missing fields!' });
     }
 
     try {
+        // Create the comic
         const comic = await Comic.create({
             title: title,
             author: author,
@@ -86,8 +89,33 @@ router.post('/', async (req, res) => {
     }
 });
 
-// PUT to update a comic by id
-router.put('/:id', (req, res) => {
+// PUT to update a comic by id -- test to see if patch is needed
+router.put('/:id', async (req, res) => {
+    try {
+        // Shortform no reassign for every field - 
+        const updatedComic = await Comic.findByIdAndUpdate(
+            // Extracts id from url params
+            // Uses 'req.body' to update only the fields sent in the request
+            req.params.id,
+            req.body,
+            // returns the updated object and validate the fields
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedComic) {
+            logger.error(`Cannot find the comic! ${error.message}`);
+            return res.status(404).json({ message: 'Comic not found!' });
+        }
+
+        logger.log(`Comic Updated Successfully!`);
+        return res.status(200).json({ message: 'Comic updated successfully!', comic: updatedComic });
+    } catch (error) {
+        logger.error(`An error occurred while updating the comic: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
 });
 
 // DELETE a comic by id

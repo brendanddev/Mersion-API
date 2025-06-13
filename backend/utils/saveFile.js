@@ -53,12 +53,17 @@ const toCsv = (data) => {
 }
 
 const saveFile = (data, fileName, format = 'json') => {
-
     try {
-        if (format == "json") {
+        format = format.toLowerCase();
+
+        if (format === "json") {
             writeFileSync(`${fileName}.json`, toJson(data));
-        } else if (format == "csv" ) {
+            logger.log(`Saved file as ${fileName}.json`);
+        } else if (format === "csv" ) {
             writeFileSync(`${fileName}.csv`, toCsv(data));
+            logger.log(`Saved file as ${fileName}.csv`);
+        } else {
+            throw new Error(`Unsupported file format: ${format}`);
         }
     } catch (error) {
         logger.error(`An error occurred while saving the file: ${error.message}`);

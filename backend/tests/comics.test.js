@@ -60,4 +60,26 @@ describe('GET /comics', () => {
 });
 
 // Basic POST test
+describe('POST /comics', () => {
 
+    test('should create a new comic', async () => {
+
+        const comic = {
+            title: 'Test Comic',
+            author: 'Test Author',
+            issue: 100,
+            volume: 100,
+            condition: 'Good',
+            isRead: false,
+            tags: ['test', 'jest']
+        };
+
+        // Send the POST request, attach comic in body, store response
+        const response = await request(url).post('/comics').send(comic);
+
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty('comic');
+        expect(response.body.comic).toHaveProperty('_id');
+        expect(response.body.comic.title).toBe(comic.title);
+    });
+});

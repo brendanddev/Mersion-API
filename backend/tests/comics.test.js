@@ -5,6 +5,8 @@
 // Brendan Dileo, June 2025
 
 const request = require('supertest');
+
+const url = "http://localhost:5000";
 const testComicId = "684a294f50c68e07bf7bcab6";
 
 // GET tests
@@ -13,7 +15,7 @@ describe('GET /comics', () => {
     // Tests GET comics route
     test('should return a list of comics', async () => {
         // Sends a GET request to the /comics endpoint
-        const response = await request('http://localhost:5000').get('/comics');
+        const response = await request(url).get('/comics');
 
         // Expect the status code to be 200
         expect(response.statusCode).toBe(200);
@@ -31,6 +33,15 @@ describe('GET /comics', () => {
 
     // GET by id
     test('should return a single comic by id', async () => {
+
+        const response = await request(url).get(`/comics/${testComicId}`);
+        expect(response.statusCode).toBe(200);
+        const comic = response.body.comic;
+        expect(Array.isArray(comic)).toBe(true);
+
+        if (comic.length > 0) {
+            expect(comic[1]).toHaveProperty('title');
+        }
     });
 });
 

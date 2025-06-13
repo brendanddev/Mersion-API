@@ -16,6 +16,10 @@ beforeAll(async () => {
     await mongoose.connect('mongodb://localhost:27017/comicsdb');
 });
 
+afterAll(async () => {
+    await mongoose.connection.close();
+});
+
 // GET tests
 describe('GET /comics', () => {
     
@@ -88,5 +92,3 @@ describe('POST /comics', () => {
         expect(response.body.comic.title).toBe(comic.title);
     });
 });
-
-mongoose.connection.close();

@@ -50,6 +50,23 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// GET to export comic collection to json or csv
+router.get('/export', async (req, res) => {
+
+    const { format } = req.params;
+
+    try {
+        const comics = await Comic.find();
+        logger.log('Comics fetched from database!');
+        logger.log(`Export format: ${format}`);
+        return res.status(200).json({ comics: comics });
+
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
 // POST a comic
 router.post('/', async (req, res) => {
     // Comic data in request body

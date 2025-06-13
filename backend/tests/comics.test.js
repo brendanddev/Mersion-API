@@ -88,3 +88,5 @@ describe('POST /comics', () => {
         expect(response.body.comic.title).toBe(comic.title);
     });
 });
+
+mongoose.connection.close();

@@ -1,1 +1,34 @@
 
+# Actions Workflow for the backend Node + Express server
+
+name: Actions Workflow
+
+# Trigger workflow on push events
+on: [push]
+
+jobs:
+    build:
+        # Runs on latest ubuntu runner
+        runs-on: ubuntu-latest
+        
+        # Only runs the job if the commit msg contains '[test]'
+        if: contains(github.event.head_commit.message, '[test]')
+
+        steps:
+            # Checkout code from the repo
+            - name: Checkout Code
+              uses: actions/checkout@v3
+            
+            # Setup Nodejs
+            - name: Setup Nodejs
+              uses: actions/setup-node@v4
+              with:
+                node-version: '22'
+            
+            - name: Install Dependencies
+              run: npm install
+            
+            - name: Run tests
+              run: npm test
+
+

@@ -53,6 +53,16 @@ const toCsv = (data) => {
 }
 
 const saveFile = (data, fileName, format = 'json') => {
+
+    try {
+        if (format == "json") {
+            writeFileSync(`${fileName}.json`, toJson(data));
+        } else if (format == "csv" ) {
+            writeFileSync(`${fileName}.csv`, toCsv(data));
+        }
+    } catch (error) {
+        logger.error(`An error occurred while saving the file: ${error.message}`);
+    }
 }
 
 module.exports = { toCsv, toJson, saveFile };

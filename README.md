@@ -4,6 +4,12 @@ A personal storage collection.
 
 ## Features
 
+- Nodejs + Express Backend API Server
+- MongoDB for Database Storage
+- Custom Logger with Timestamps and Colored Messages
+- SwaggerJS for API Documentation
+- Jest and Supertest to Test Backend
+
 ## Usage
 
 ## Version History

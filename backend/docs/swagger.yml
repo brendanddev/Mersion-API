@@ -82,3 +82,20 @@ paths:
       responses:
         '201':
           description: Comic created
+  
+  /comics/{id}:
+    get:
+      summary: Retreive a Comic by ID
+      description: Returns a single comic object based on the provided ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: 
+            type: string
+          description: The ID of the Comic to retreive
+      responses:
+        '200':
+          description: Comic by ID
+        '404':
+          description: Comic not found

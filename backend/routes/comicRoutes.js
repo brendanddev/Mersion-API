@@ -4,6 +4,7 @@
 // Brendan Dileo, June 2025
 
 const express = require('express');
+const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
 
@@ -26,8 +27,21 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     // Extract id from request params
     const { id } = req.params;
+
+    // Check id format
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        logger.warn(`Invalid ID format: ${id}`);
+        return res.status(400).json({ message: 'Invalid ID format' });
+    }
+
     try {
         const comic = await Comic.findById(id);
+
+        if (!comic) {
+            logger.error(`Comic with id: ${id} does not exist!`);
+            return res.status(404).json({ message: 'Comic does not exist!' });
+        }
+
         logger.log(`Comic fetched from database!`);
         return res.status(200).json({ comic: comic });
     } catch (error) {

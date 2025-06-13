@@ -1,20 +1,31 @@
 
 // comics.test.js
+// Defines tests to verify the backend routes.
+// Uses Jest to structure the tests and supertest to simulate http requests.
+// Brendan Dileo, June 2025
 
 const request = require('supertest');
 const testComicId = "684a294f50c68e07bf7bcab6";
 
 // GET tests
 describe('GET /comics', () => {
-    // Basic GET
+    
+    // Tests GET comics route
     test('should return a list of comics', async () => {
+        // Sends a GET request to the /comics endpoint
         const response = await request('http://localhost:5000').get('/comics');
 
+        // Expect the status code to be 200
         expect(response.statusCode).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
 
-        if (response.body.length > 0) {
-            expect(response.body[0]).toHaveProperty('title');
+        // Extract comic data from body of request
+        const comics = response.body.comics;
+        
+        // Expect the response to be array of comics
+        expect(Array.isArray(comics)).toBe(true);
+
+        if (comics.length > 0) {
+            expect(comics[0]).toHaveProperty('title');
         }
     });
 

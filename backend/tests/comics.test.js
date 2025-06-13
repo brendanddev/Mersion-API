@@ -9,6 +9,7 @@ const logger = require('../utils/logger');
 
 const url = "http://localhost:5000";
 const testComicId = "684a294f50c68e07bf7bcab6";
+const invalidComicId = "0x0x0x0x0x0x0x0x0x0x0x0x0x0x0";
 
 // GET tests
 describe('GET /comics', () => {
@@ -38,7 +39,6 @@ describe('GET /comics', () => {
         const response = await request(url).get(`/comics/${testComicId}`);
         expect(response.statusCode).toBe(200);
         const comic = response.body.comic;
-        logger.log(comic);
 
         // Expecting single comic object to be returned not list of them
         expect(typeof comic).toBe('object');
@@ -49,6 +49,14 @@ describe('GET /comics', () => {
         expect(comic).toHaveProperty('title');
         // expect(Array.isArray(comic)).toBe(true);
     });
+
+    // Test GET by invalid id
+    test('should return an error for an invalid comic ID', async () => {
+        const response = await request(url).get(`/comics/${invalidComicId}`);
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toHaveProperty('message');
+    });
+
 });
 
 // Basic POST test

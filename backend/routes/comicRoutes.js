@@ -53,12 +53,15 @@ router.get('/:id', async (req, res) => {
 // GET to export comic collection to json or csv
 router.get('/export', async (req, res) => {
 
-    const { format } = req.params;
+    // Query for string params
+    const { format } = req.query;
 
     try {
         const comics = await Comic.find();
         logger.log('Comics fetched from database!');
         logger.log(`Export format: ${format}`);
+
+        // Set file name, validate, save 
         return res.status(200).json({ comics: comics });
 
     } catch (error) {

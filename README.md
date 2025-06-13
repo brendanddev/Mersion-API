@@ -4,6 +4,7 @@ A personal storage collection.
 
 ## Features
 
+- Manage your own virtual comic collection
 - Nodejs + Express Backend API Server
 - MongoDB for Database Storage
 - Custom Logger with Timestamps and Colored Messages

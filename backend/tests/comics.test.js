@@ -4,12 +4,17 @@
 // Uses Jest to structure the tests and supertest to simulate http requests.
 // Brendan Dileo, June 2025
 
+const app = require('../app');
 const request = require('supertest');
-const logger = require('../utils/logger');
+const mongoose = require('mongoose');
 
-const url = "http://localhost:5000";
 const testComicId = "684a294f50c68e07bf7bcab6";
 const invalidComicId = "0x0x0x0x0x0x0x0x0x0x0x0x0x0x0";
+
+// Connect to db before any tests
+beforeAll(async () => {
+    await mongoose.connect('mongodb://localhost:27017/comicsdb');
+});
 
 // GET tests
 describe('GET /comics', () => {
@@ -17,7 +22,7 @@ describe('GET /comics', () => {
     // Tests GET comics route
     test('should return a list of comics', async () => {
         // Sends a GET request to the /comics endpoint
-        const response = await request(url).get('/comics');
+        const response = await request(app).get('/comics');
 
         // Expect the status code to be 200
         expect(response.statusCode).toBe(200);
@@ -36,7 +41,7 @@ describe('GET /comics', () => {
     // GET by id
     test('should return a single comic by id', async () => {
 
-        const response = await request(url).get(`/comics/${testComicId}`);
+        const response = await request(app).get(`/comics/${testComicId}`);
         expect(response.statusCode).toBe(200);
         const comic = response.body.comic;
 
@@ -52,7 +57,7 @@ describe('GET /comics', () => {
 
     // Test GET by invalid id
     test('should return an error for an invalid comic ID', async () => {
-        const response = await request(url).get(`/comics/${invalidComicId}`);
+        const response = await request(app).get(`/comics/${invalidComicId}`);
         expect(response.statusCode).toBe(400);
         expect(response.body).toHaveProperty('message');
     });
@@ -75,7 +80,7 @@ describe('POST /comics', () => {
         };
 
         // Send the POST request, attach comic in body, store response
-        const response = await request(url).post('/comics').send(comic);
+        const response = await request(app).post('/comics').send(comic);
 
         expect(response.statusCode).toBe(201);
         expect(response.body).toHaveProperty('comic');

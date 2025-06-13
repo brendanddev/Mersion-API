@@ -5,6 +5,7 @@
 // Brendan Dileo, June 2025
 
 const request = require('supertest');
+const logger = require('../utils/logger');
 
 const url = "http://localhost:5000";
 const testComicId = "684a294f50c68e07bf7bcab6";
@@ -37,11 +38,16 @@ describe('GET /comics', () => {
         const response = await request(url).get(`/comics/${testComicId}`);
         expect(response.statusCode).toBe(200);
         const comic = response.body.comic;
-        expect(Array.isArray(comic)).toBe(true);
+        logger.log(comic);
 
-        if (comic.length > 0) {
-            expect(comic[1]).toHaveProperty('title');
-        }
+        // Expecting single comic object to be returned not list of them
+        expect(typeof comic).toBe('object');
+        expect(comic).not.toBeNull();
+
+        // Expect to see id and title in returned comic object
+        expect(comic).toHaveProperty('_id');
+        expect(comic).toHaveProperty('title');
+        // expect(Array.isArray(comic)).toBe(true);
     });
 });
 

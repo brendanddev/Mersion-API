@@ -1,6 +1,10 @@
-# APIssues Comics
+# KollectBin
 
-A personal storage collection.
+A personal collection API for anything, and everything.
+Start with comics. Expand to anything.
+
+Kollectbin began as a simple backend for managing a comic book collection, and complete with user authentication.
+While it's currently focused on comics, the project is built with expansion in mind — aiming to support broader collection types like games, books, or any personal inventory in the future.
 
 ## Features
 
@@ -18,4 +22,5 @@ A personal storage collection.
 | Version        | Month       | Description  |
 | -------------  | ----------- | -----------  |
 | 1.0.0          | May 2025    |              |
-| 1.1.0          | June 2025   |              | 
+| 1.1.0          | June 2025   |              |
+| 1.2.0          | June 2025   |              |

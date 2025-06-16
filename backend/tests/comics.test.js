@@ -11,6 +11,8 @@ const mongoose = require('mongoose');
 const testComicId = "684a294f50c68e07bf7bcab6";
 const invalidComicId = "0x0x0x0x0x0x0x0x0x0x0x0x0x0x0";
 
+let testId;
+
 // Connect to db before any tests
 beforeAll(async () => {
     await mongoose.connect('mongodb://localhost:27017/comicsdb');
@@ -71,6 +73,7 @@ describe('GET /comics', () => {
 // Basic POST test
 describe('POST /comics', () => {
 
+    // POST to create a test comic
     test('should create a new comic', async () => {
 
         const comic = {
@@ -90,5 +93,27 @@ describe('POST /comics', () => {
         expect(response.body).toHaveProperty('comic');
         expect(response.body.comic).toHaveProperty('_id');
         expect(response.body.comic.title).toBe(comic.title);
+
+        testId = response.body.comic._id;
     });
 });
+
+// PUT test
+describe('PUT /comics/:id', () => {
+    test('should update the comic', async () => {
+        
+        // Ensure test comic id is defined
+        expect(testId).toBeDefined();
+        const updates = { condition: 'Near Mint', isRead: true };
+
+        // Send PUT request
+        const response = await request(app)
+            .put(`/comics/${testComicId}`)
+            .send(updates);
+        
+        expect(response.statusCode).toBe(200);
+        expect(response.body.comic).toHaveProperty('condition', 'Excellent');
+        expect(response.body.comic).toHaveProperty('isRead', true);
+    });
+});
+

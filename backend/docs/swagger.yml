@@ -1,9 +1,11 @@
 
+# Swagger Docs
+
 openapi: 3.0.0
 info:
-  title: API
-  version: 1.1.0
-  description: Swagger API Documentation
+  title: Kollectbin
+  version: 1.2.0
+  description: Swagger API Documentation for Kollectbin
 
 servers: 
   - url: http://localhost:5000
@@ -177,7 +179,24 @@ paths:
           description: Comic not found
 
     # DELETE to delete a comic by id
-    
+    delete:
+      tags:
+        - Comics
+      summary: Delete a comic by ID
+      description: Removes a comic from the collection using its ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Comic to delete
+      responses:
+        '200':
+          description: Comic successfully deleted
+        '404':
+          description: Comic not found
+
   
   # Filter comics GET
   /comics/filter:

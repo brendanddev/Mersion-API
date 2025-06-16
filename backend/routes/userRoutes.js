@@ -77,3 +77,9 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Server Error!' });
     }
 });
+
+// TODO: Logout route
+router.get('/logout', (req, res) => {
+    logger.log('User logged out successfully!');
+    return res.status(200).json({ message: 'Logged out successfully!' });
+});

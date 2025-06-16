@@ -80,6 +80,16 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// GET comics by a filter
+router.get('/filter', async (req, res) => {
+    try {
+
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
 // POST a comic
 router.post('/', async (req, res) => {
     // Comic data in request body

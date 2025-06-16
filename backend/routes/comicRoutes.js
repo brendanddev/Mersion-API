@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
 const { saveFile } = require('../utils/saveFile');
+const validateComic = require('../middleware/validateComic');
 const path = require('path');
 
 // Creates an instance of the express router
@@ -108,7 +109,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST a comic
-router.post('/', async (req, res) => {
+router.post('/', validateComic, async (req, res) => {
     // Comic data in request body
     const {
         title,
@@ -126,12 +127,6 @@ router.post('/', async (req, res) => {
         tags,
         notes
     } = req.body;
-
-    // Basic validation
-    if (!title || !author || !issue || !volume) {
-        logger.error('One of the required fields are missing!');
-        return res.status(400).json({ message: 'Missing fields!' });
-    }
 
     try {
         // Create the comic

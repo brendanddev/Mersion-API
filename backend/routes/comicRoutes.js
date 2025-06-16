@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
 const { saveFile } = require('../utils/saveFile');
+const path = require('path');
 
 // Creates an instance of the express router
 const router = express.Router();
@@ -18,6 +19,33 @@ router.get('/', async (req, res) => {
         const comics = await Comic.find();
         logger.log(`Comics fetched from database: ${comics.length}`);
         return res.status(200).json({ comics: comics });
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
+// GET to export comic collection to json or csv
+router.get('/export', async (req, res) => {
+
+    // Query for string params
+    const { format } = req.query;
+    const exportFormat = format?.toLowerCase();
+
+    try {
+        const comics = await Comic.find();
+        logger.log('Comics fetched from database!');
+        logger.log(`Export format: ${format}`);
+
+        // Construct file name and save the file
+        const fileName = `comics_export_${Date.now()}`;
+        saveFile(comics, fileName, exportFormat);
+
+        const filePath = path.resolve(__dirname, '..', `${fileName}.${exportFormat}`);        
+        return res.download(filePath, `${fileName}.${exportFormat}`);
+
+        // Set file name, validate, save 
+        // return res.status(200).json({ comics: comics });
     } catch (error) {
         logger.error(`An error occurred: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });
@@ -46,33 +74,6 @@ router.get('/:id', async (req, res) => {
 
         logger.log(`Comic fetched from database!`);
         return res.status(200).json({ comic: comic });
-    } catch (error) {
-        logger.error(`An error occurred: ${error.message}`);
-        res.status(500).json({ message: 'Server Error!' });
-    }
-});
-
-// GET to export comic collection to json or csv
-router.get('/export', async (req, res) => {
-
-    // Query for string params
-    const { format } = req.query;
-    const exportFormat = format?.toLowerCase();
-
-    try {
-        const comics = await Comic.find();
-        logger.log('Comics fetched from database!');
-        logger.log(`Export format: ${format}`);
-
-        // Construct file name and save the file
-        const fileName = `comics_export_${Date.now()}`;
-        saveFile(comics, fileName, exportFormat);
-
-        const filePath = path.resolve(__dirname, '..', `${fileName}.${exportFormat}`);        
-        return res.download(filePath, `${fileName}.${exportFormat}`);
-
-        // Set file name, validate, save 
-        // return res.status(200).json({ comics: comics });
     } catch (error) {
         logger.error(`An error occurred: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });

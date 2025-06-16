@@ -94,8 +94,9 @@ paths:
         '201':
           description: Comic created
 
-  # GET a comic by id
+  # GET, PUT, DELETE by id
   /comics/{id}:
+    # GET to retreive by id
     get:
       tags: 
         - Comics
@@ -113,6 +114,80 @@ paths:
           description: Comic by ID
         '404':
           description: Comic not found
+    
+    # PUT to update by id
+    put:
+      tags: 
+        - Comics
+      summary: Update a comic by ID
+      description: Updates a comic in the collection by its ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the Comic to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                author: 
+                  type: string
+                issue:
+                  type: number
+                volume:
+                  type: number
+                publisher:
+                  type: string
+                coverVariant:
+                  type: string
+                releaseDate:
+                  type: string
+                  format: date
+                rating:
+                  type: number
+                purchasePrice:
+                  type: number
+                currentValue:
+                  type: number
+                condition:
+                  type: string
+                isRead:
+                  type: boolean
+                genre:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: string
+                notes:
+                  type: string
+      responses:
+        '200':
+          description: Comic successfully updated
+        '400':
+          description: Invalid update request
+        '404':
+          description: Comic not found
+
+    # DELETE to delete a comic by id
+    
+  
+  # Filter comics GET
+  /comics/filter:
+    get:
+      tags:
+        - Comics
+      summary: Filter comic collection by author, publisher, volume, etc.
+      responses:
+        '200': 
+          description: Comic by filter
 
   # User register route
   /users/register:

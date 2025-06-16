@@ -13,7 +13,7 @@ While it's currently focused on comics, the project is built with expansion in m
 - MongoDB for Database Storage
 - Custom Logger with Timestamps and Colored Messages
 - SwaggerJS for API Documentation
-- Jest and Supertest to Test Backend
+- Jest and Supertest to automate testing
 - User Management System (Register & Login)
 
 ## Usage

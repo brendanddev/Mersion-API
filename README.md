@@ -10,6 +10,7 @@ A personal storage collection.
 - Custom Logger with Timestamps and Colored Messages
 - SwaggerJS for API Documentation
 - Jest and Supertest to Test Backend
+- User Management System (Register & Login)
 
 ## Usage
 

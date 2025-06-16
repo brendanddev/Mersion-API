@@ -106,8 +106,51 @@ paths:
   /users/register:
     post:
       summary: Register a new user
-  
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              required: 
+                - username
+                - email
+                - password
+              properties:
+                username: 
+                  type: string
+                email:
+                  type: string
+                password: 
+                  type: string
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Request related error
+
+  # User login route
   /users/login:
     post:
       summary: Login to your account
-
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password 
+              properties:
+                email:
+                  type: string
+                password: 
+                  type: string 
+      responses:
+        '200':
+          description: Login Successful!
+        '400':
+          description: Bad request - missing or invalid parameters
+        '401':
+          description: Unauthorized - incorrect email or password

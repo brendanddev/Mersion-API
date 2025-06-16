@@ -108,7 +108,7 @@ describe('PUT /comics/:id', () => {
 
         // Send PUT request
         const response = await request(app)
-            .put(`/comics/${testComicId}`)
+            .put(`/comics/${testId}`)
             .send(updates);
         
         expect(response.statusCode).toBe(200);
@@ -117,3 +117,14 @@ describe('PUT /comics/:id', () => {
     });
 });
 
+// DELETE test
+describe('DELETE /comics/:id', () => {
+    test('should delete the comic', async () => {
+        expect(testId).toBeDefined();
+        const response = await request(app).delete(`/comics/${testId}`);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('message', 'Comic deleted successfully!');
+        testId = null;
+    });
+});

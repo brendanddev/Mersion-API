@@ -7,6 +7,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
+const { saveFile } = require('../utils/saveFile');
 
 // Creates an instance of the express router
 const router = express.Router();
@@ -35,6 +36,7 @@ router.get('/:id', async (req, res) => {
     }
 
     try {
+        // Find comic by id from db
         const comic = await Comic.findById(id);
 
         if (!comic) {
@@ -55,15 +57,22 @@ router.get('/export', async (req, res) => {
 
     // Query for string params
     const { format } = req.query;
+    const exportFormat = format?.toLowerCase();
 
     try {
         const comics = await Comic.find();
         logger.log('Comics fetched from database!');
         logger.log(`Export format: ${format}`);
 
-        // Set file name, validate, save 
-        return res.status(200).json({ comics: comics });
+        // Construct file name and save the file
+        const fileName = `comics_export_${Date.now()}`;
+        saveFile(comics, fileName, exportFormat);
 
+        const filePath = path.resolve(__dirname, '..', `${fileName}.${exportFormat}`);        
+        return res.download(filePath, `${fileName}.${exportFormat}`);
+
+        // Set file name, validate, save 
+        // return res.status(200).json({ comics: comics });
     } catch (error) {
         logger.error(`An error occurred: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });

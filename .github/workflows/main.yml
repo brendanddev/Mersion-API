@@ -14,6 +14,13 @@ jobs:
         # Only runs the job if the commit msg contains '[test]'
         if: contains(github.event.head_commit.message, '[test]')
 
+        # Start mongo container
+        services:
+          mongodb: 
+            image: mongo:5.0
+            ports: 
+              - 27017:27017
+
         steps:
             # Checkout code from the repo
             - name: Checkout Code
@@ -25,10 +32,12 @@ jobs:
               with:
                 node-version: '22'
             
+            # Install from package
             - name: Install Dependencies
               run: npm install
               working-directory: backend
             
+            # Run jest/supertest tests
             - name: Run tests
               env:
                 MONGODB_URI: mongodb://localhost:27017/comicsdb

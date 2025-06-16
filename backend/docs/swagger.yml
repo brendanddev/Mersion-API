@@ -9,6 +9,7 @@ servers:
   - url: http://localhost:5000
 
 paths:
+  # Comic related routes
   /comics:
     # Get all comics
     get:
@@ -82,7 +83,7 @@ paths:
       responses:
         '201':
           description: Comic created
-          
+
   # GET a comic by id
   /comics/{id}:
     get:
@@ -100,3 +101,13 @@ paths:
           description: Comic by ID
         '404':
           description: Comic not found
+
+  # User register route
+  /users/register:
+    post:
+      summary: Register a new user
+  
+  /users/login:
+    post:
+      summary: Login to your account
+

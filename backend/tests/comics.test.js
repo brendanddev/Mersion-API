@@ -8,7 +8,7 @@ const app = require('../app');
 const request = require('supertest');
 const mongoose = require('mongoose');
 
-const testComicId = "684a294f50c68e07bf7bcab6";
+const testComicId = "68509f759e9b1604b507f66f";
 const invalidComicId = "0x0x0x0x0x0x0x0x0x0x0x0x0x0x0";
 
 let testId;
@@ -112,7 +112,7 @@ describe('PUT /comics/:id', () => {
             .send(updates);
         
         expect(response.statusCode).toBe(200);
-        expect(response.body.comic).toHaveProperty('condition', 'Excellent');
+        expect(response.body.comic).toHaveProperty('condition', 'Near Mint');
         expect(response.body.comic).toHaveProperty('isRead', true);
     });
 });

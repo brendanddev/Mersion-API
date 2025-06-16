@@ -154,7 +154,7 @@ router.put('/:id', async (req, res) => {
 
 // DELETE a comic by id
 router.delete('/:id', async (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
 
     try {
         const deletedComic = await Comic.findByIdAndDelete(id);

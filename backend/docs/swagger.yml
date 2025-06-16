@@ -82,7 +82,8 @@ paths:
       responses:
         '201':
           description: Comic created
-  
+          
+  # GET a comic by id
   /comics/{id}:
     get:
       summary: Retreive a Comic by ID

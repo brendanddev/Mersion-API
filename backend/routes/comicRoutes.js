@@ -52,6 +52,33 @@ router.get('/export', async (req, res) => {
     }
 });
 
+
+// GET comics by a filter (title, author, volume, publisher)
+router.get('/filter', async (req, res) => {
+    // Extract filter params from request
+    const { title, author, volume, publisher } = req.query;
+    const filter = {};
+
+    try {
+        // Check for type of filter
+        if (title) filter.title = new RegExp(title, 'i');
+        if (author) filter.author = new RegExp(author, 'i');
+        if (volume) filter.volume = parseInt(volume);
+        if (publisher) filter.publisher = new RegExp(publisher, 'i');
+        logger.log(`Filtering comics with criteria: ${JSON.stringify(filter)}`);
+
+        // Find comics by filter
+        const filteredComics = await Comic.find(filter);
+        if (filteredComics.length === 0) return res.status(404).json({ error: 'No comics found matching the filter criteria.' });
+        
+        logger.log(`Found ${filteredComics.length} comics matching filter criteria.`);
+        res.status(200).json(filteredComics);
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
 // GET a comic by id
 router.get('/:id', async (req, res) => {
     // Extract id from request params
@@ -74,32 +101,6 @@ router.get('/:id', async (req, res) => {
 
         logger.log(`Comic fetched from database!`);
         return res.status(200).json({ comic: comic });
-    } catch (error) {
-        logger.error(`An error occurred: ${error.message}`);
-        res.status(500).json({ message: 'Server Error!' });
-    }
-});
-
-// GET comics by a filter (title, author, volume, publisher)
-router.get('/filter', async (req, res) => {
-    // Extract filter params from request
-    const { title, author, volume, publisher } = req.query;
-    const filter = {};
-
-    try {
-        // Check for type of filter
-        if (title) filter.title = new RegExp(title, 'i');
-        if (author) filter.publisher = new RegExp(author, 'i');
-        if (volume) filter.volume = new RegExp(volume, 'i');
-        if (publisher) filter.publisher = new RegExp(publisher, 'i');
-        logger.log(`Filtering comics with criteria: ${JSON.stringify(filter)}`);
-
-        // Find comics by filter
-        const filteredComics = await Comic.find(filter);
-        if (filteredComics.length === 0) return res.status(404).json({ error: 'No comics found matching the filter criteria.' });
-        
-        logger.log(`Found ${filteredComics.length} comics matching filter criteria.`);
-        res.status(200).json(filteredComics);
     } catch (error) {
         logger.error(`An error occurred: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });

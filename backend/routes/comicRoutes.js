@@ -33,7 +33,7 @@ router.get('/export', async (req, res) => {
     const exportFormat = format?.toLowerCase();
 
     try {
-        const comics = await Comic.find();
+        const comics = await Comic.find().lean();
         logger.log('Comics fetched from database!');
         logger.log(`Export format: ${format}`);
 

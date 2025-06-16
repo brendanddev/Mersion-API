@@ -1,4 +1,8 @@
 
+# Exported comic collection files
+/comics_export_*.json
+/comics_export_*.csv
+
 # Node.js
 node_modules/
 .env

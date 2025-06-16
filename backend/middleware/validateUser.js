@@ -5,8 +5,8 @@
 
 const logger = require('../utils/logger');
 const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
-const emailRegex = //;
-const passwordRegex = //;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
 const validateUser = (req, res, next) => {
     const { username, email, password } = req.body;
@@ -22,8 +22,18 @@ const validateUser = (req, res, next) => {
     }
 
     // Validate email against regex
-    
+    if (!emailRegex.test(email)) {
+        logger.error(`Invalid email: ${email}`);
+        return res.status(400).json({ message: 'Email is invalid.' });
+    }
+
     // Validate password against regex
+    if (!passwordRegex.test(password)) {
+        logger.error(`Invalid password!`);
+        return res.status(400).json({
+            message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
+        });
+    }
 
     next();
 };

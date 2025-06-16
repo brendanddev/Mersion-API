@@ -8,11 +8,19 @@ info:
 servers: 
   - url: http://localhost:5000
 
+tags:
+  - name: Users 
+    description: Endpoints for user registration and authentication.
+  - name: Comics 
+    description: Endpoints for managing comic collection and data.
+
 paths:
   # Comic related routes
   /comics:
     # Get all comics
     get:
+      tags: 
+        - Comics
       summary: Get all comics
       responses:
         '200':
@@ -20,6 +28,8 @@ paths:
     
     # Add a comic
     post:
+      tags: 
+        - Comics
       summary: Create a new comic
       requestBody:
         required: true
@@ -87,6 +97,8 @@ paths:
   # GET a comic by id
   /comics/{id}:
     get:
+      tags: 
+        - Comics
       summary: Retreive a Comic by ID
       description: Returns a single comic object based on the provided ID.
       parameters:
@@ -105,6 +117,8 @@ paths:
   # User register route
   /users/register:
     post:
+      tags: 
+        - Users
       summary: Register a new user
       requestBody:
         required: true
@@ -132,6 +146,8 @@ paths:
   # User login route
   /users/login:
     post:
+      tags: 
+        - Users
       summary: Login to your account
       requestBody:
         required: true

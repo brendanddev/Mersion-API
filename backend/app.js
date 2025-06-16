@@ -7,6 +7,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const comicRoutes = require('./routes/comicRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
@@ -22,6 +23,7 @@ app.use(helmet());
 
 app.get('/', (req, res) => res.send('Server up and running...'));
 app.use('/comics', comicRoutes);
+app.use('/users', userRoutes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 module.exports = app;

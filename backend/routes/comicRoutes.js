@@ -8,8 +8,8 @@ const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
 const { saveFile } = require('../utils/saveFile');
-const validateAndSanitizeComic = require('../middleware/validateComic');
-const validateComicMiddleware = require('../middleware/validateComic');
+const { validateAndSanitizeComic } = require('../middleware/validateComic');
+const { validateComicMiddleware } = require('../middleware/validateComic');
 const path = require('path');
 
 // Creates an instance of the express router

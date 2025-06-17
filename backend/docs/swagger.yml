@@ -207,6 +207,39 @@ paths:
       responses:
         '200': 
           description: Comic by filter
+  
+  # Export comics GET
+  /comics/export:
+    get:
+      tags: 
+        - Comics
+      summary: Export comic collection in JSON or CSV format
+      parameters:
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum: [json, csv]
+          description: Format of the export file (json or csv). Default is json.
+      responses:
+        '200':
+          description: Exported comic data file
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+            text/csv:
+              schema:
+                type: string
+        '400':
+          description: Invalid format parameter
+
+  # Import comics POST
+  /comics/import:
+
+
 
   # User register route
   /users/register:

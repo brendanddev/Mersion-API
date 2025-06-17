@@ -238,8 +238,28 @@ paths:
 
   # Import comics POST
   /comics/import:
-
-
+    post: 
+      tags: 
+        - Comics 
+      summary: Bulk import comics from JSON data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - data
+              properties:
+                data:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '200':
+          description: Comics imported successfully
+        '400':
+          description: Invalid or missing import data
 
   # User register route
   /users/register:

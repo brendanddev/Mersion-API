@@ -4,7 +4,7 @@
 openapi: 3.0.0
 info:
   title: Kollectbin
-  version: 1.2.0
+  version: 1.3.0
   description: Swagger API Documentation for Kollectbin
 
 servers: 
@@ -317,3 +317,27 @@ paths:
           description: Bad request - missing or invalid parameters
         '401':
           description: Unauthorized - incorrect email or password
+  
+  # User logout route GET
+  /users/logout:
+
+  # User dashboard route GET
+  /users/dashboard:
+    get: 
+      tags: 
+        - Users
+      summary: Get user dashboard (authenticated)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Dashboard data for the authenticated user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Unauthorized - token missing or invalid

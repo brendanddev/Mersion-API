@@ -7,18 +7,15 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const logger = require('../utils/logger');
+const validateUser = require('../middleware/validateUser');
 
 // Creates an instance of the express router
 const router = express.Router();
 
 // POST to register a user
-router.post('/register', async (req, res) => {
+router.post('/register', validateUser, async (req, res) => {
     // Extract data from request body and validate
     const { username, email, password } = req.body;
-    if (!username || !email || !password) {
-        logger.error('One of the required fields are missing!');
-        return res.status(400).json({ message: 'Username, email, and password are required.' });
-    }
 
     try {
         // Check for existing user
@@ -38,6 +35,11 @@ router.post('/register', async (req, res) => {
             email: email,
             password: hash,
         });
+
+        if (!user) {
+            logger.error('An error occurred while creating the user!');
+            return res.status(500).json({ message: 'An error occurred while creating the user!' });
+        }
         
         logger.log(`New User: ${username} created successfully!`);
         return res.status(201).json({ message: 'User created!' });

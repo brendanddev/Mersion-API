@@ -4,16 +4,24 @@
 // Brendan Dileo, June 2025
 
 const logger = require('../utils/logger');
+const validator = require('validator');
 const usernameRegex = /^[a-zA-Z0-9_]{3,30}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
 const validateUser = (req, res, next) => {
-    const { username, email, password } = req.body;
+    
+    let { username, email, password } = req.body;
+
     if (!username || !email || !password) {
         logger.error('One of the required fields are missing!');
         return res.status(400).json({ message: 'Username, email, and password are required.' });
     }
+
+    // Sanitize
+    username = validator.trim(username);
+    username = validator.escape(username);
+    email = validator.normalizeEmail(email);
 
     // Validate username against regex
     if (!usernameRegex.test(username)) {
@@ -34,6 +42,10 @@ const validateUser = (req, res, next) => {
             message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
         });
     }
+
+    // Assign values back
+    req.body.username = username;
+    req.body.email = email;
 
     next();
 };

@@ -6,24 +6,27 @@
 const logger = require('../utils/logger');
 const validator = require('validator');
 
-const validateComic = (req, res, next) => {
-    const { title, author, issue, volume } = req.body;
-    if (!title || !author || !issue || !volume) {
+// Validates and sanitizes a single comic object
+const validateAndSanitizeComic = (comic) => {
+    const { title, author, issue, volume } = comic;
+    
+    if (!title || !author || !issue || !volume) 
+        return 'One or more of the required fields are missing!';
+
+    // Sanitize text
+    comic.title = validator.escape(validator.trim(title));
+    comic.author = validator.escape(validator.trim(author));
+    return null;
+}
+
+// Middleware to validate and sanitize incoming comic data from the request body
+const validateComicMiddleware = (req, res, next) => {
+    const error = validateAndSanitizeComic(req.body);
+    if (error) {
         logger.error('One of the required fields are missing!');
         return res.status(400).json({ message: 'Missing required fields!' });
     }
-
-    // Sanitize text
-    title = validator.trim(title);
-    title = validator.escape(title);
-    author = validator.trim(author);
-    author = validator.escape(author);
-
-    // Assign back to body
-    req.body.title = title;
-    req.body.author = author;
-
     next();
-};
+}
 
-module.exports = validateComic;
+module.exports = { validateAndSanitizeComic, validateComicMiddleware };

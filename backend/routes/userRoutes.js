@@ -9,6 +9,7 @@ const User = require('../models/userModel');
 const logger = require('../utils/logger');
 const validateUser = require('../middleware/validateUser');
 const generateToken = require('../utils/token');
+const authenticateToken = require('../middleware/auth');
 
 // Creates an instance of the express router
 const router = express.Router();
@@ -93,5 +94,21 @@ router.get('/logout', (req, res) => {
     return res.status(200).json({ message: 'Logged out successfully!' });
 });
 
+// GET to display user dashboard
+router.get('/dashboard', authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.userId);
+        if (!user)
+            return res.status(404).json({ message: 'User not found' });
+
+        return res.status(200).json({
+            username: user.username,
+            email: user.email,
+        });
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
 
 module.exports = router;

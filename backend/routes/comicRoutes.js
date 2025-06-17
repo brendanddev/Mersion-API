@@ -8,7 +8,8 @@ const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
 const logger = require('../utils/logger');
 const { saveFile } = require('../utils/saveFile');
-const validateComic = require('../middleware/validateComic');
+const validateAndSanitizeComic = require('../middleware/validateComic');
+const validateComicMiddleware = require('../middleware/validateComic');
 const path = require('path');
 
 // Creates an instance of the express router
@@ -109,7 +110,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST a comic
-router.post('/', validateComic, async (req, res) => {
+router.post('/', validateComicMiddleware, async (req, res) => {
     // Comic data in request body
     const {
         title,
@@ -165,13 +166,15 @@ router.post('/import', async (req, res) => {
     if (!data) return res.status(400).json({ message: 'Data is required for this action!' });
     if (!Array.isArray(data)) return res.status(400).json({ message: 'Comic data must be in an array!' });
 
-    for (const comic of data) {
-        if (!validateComic(comic)) {
-            
+    for (let i = 0; i < data.length; i++) {
+        const comic = data[i];
+        const error = validateAndSanitizeComic(comic);
+        if (error) {
+            logger.error(`Error in comic at index ${i}: ${error}`);
+            return res.status(400).json({ message: 'Error in one of the comics!' });
         }
     }
-
-
+    
     try {
         const result = await Comic.insertMany(data);
         res.status(201).json({

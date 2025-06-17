@@ -158,10 +158,26 @@ router.post('/', validateComic, async (req, res) => {
 // POST to bulk import comics
 router.post('/import', async (req, res) => {
 
+    // Extract incoming data from req body
     const { data } = req.body;
 
-    try {
+    // Validate data
+    if (!data) return res.status(400).json({ message: 'Data is required for this action!' });
+    if (!Array.isArray(data)) return res.status(400).json({ message: 'Comic data must be in an array!' });
 
+    for (const comic of data) {
+        if (!validateComic(comic)) {
+            
+        }
+    }
+
+
+    try {
+        const result = await Comic.insertMany(data);
+        res.status(201).json({
+            message: 'Bulk import successful!',
+            insertedCount: result.length
+        });
     } catch (error) {
         logger.error(`An error occurred while creating the comic: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });

@@ -155,6 +155,19 @@ router.post('/', validateComic, async (req, res) => {
     }
 });
 
+// POST to bulk import comics
+router.post('/import', async (req, res) => {
+
+    const { data } = req.body;
+
+    try {
+
+    } catch (error) {
+        logger.error(`An error occurred while creating the comic: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
 // PUT to update a comic by id
 router.put('/:id', async (req, res) => {
     try {

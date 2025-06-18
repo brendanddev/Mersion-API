@@ -42,3 +42,7 @@ describe('GET /shops', () => {
         }
     });
 });
+
+// POST tests
+describe('POST /shops', () => {
+});

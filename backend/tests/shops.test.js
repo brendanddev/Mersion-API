@@ -100,7 +100,7 @@ describe('DELETE /shops/:id', () => {
         // Ensure test id exists before running the delete test
         expect(testId).toBeDefined();
 
-        // Se
+        // Send DELETE request and store response
         const response = await request(app).delete(`/shops/${testId}`);
 
         // Validate response properties

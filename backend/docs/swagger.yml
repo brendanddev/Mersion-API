@@ -303,7 +303,7 @@ paths:
                 notes: 
                   type: string
                 tags: 
-                  type: Array
+                  type: array
                   items: 
                     type: string
       responses:

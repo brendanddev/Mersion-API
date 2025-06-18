@@ -45,7 +45,7 @@ describe('GET /shops', () => {
     });
 });
 
-// POST tests
+// POST test
 describe('POST /shops', () => {
 
     // POST to create a new shop entry
@@ -67,3 +67,7 @@ describe('POST /shops', () => {
         testId = response.body.shop._id;
     });
 });
+
+// PUT test
+
+// DELETE test

@@ -7,6 +7,7 @@
 const app = require('../app');
 const request = require('supertest');
 const mongoose = require('mongoose');
+const Comic = require('../models/comicModel');
 
 const testComicId = "68509f759e9b1604b507f66f";
 const invalidComicId = "0x0x0x0x0x0x0x0x0x0x0x0x0x0x0";
@@ -47,18 +48,16 @@ describe('GET /comics', () => {
     // GET by id
     test('should return a single comic by id', async () => {
 
-        const response = await request(app).get(`/comics/${testComicId}`);
+        const testComic = await Comic.create({
+            title: 'Test Comic',
+            author: 'Test Author',
+            issue: 100,
+            volume: 100
+        });
+
+        const response = await request(app).get(`/comics/${testComic._id}`);
         expect(response.statusCode).toBe(200);
-        const comic = response.body.comic;
-
-        // Expecting single comic object to be returned not list of them
-        expect(typeof comic).toBe('object');
-        expect(comic).not.toBeNull();
-
-        // Expect to see id and title in returned comic object
-        expect(comic).toHaveProperty('_id');
-        expect(comic).toHaveProperty('title');
-        // expect(Array.isArray(comic)).toBe(true);
+        expect(response.body.comic).toHaveProperty('title', 'Test Comic');
     });
 
     // Test GET by invalid id

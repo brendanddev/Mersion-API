@@ -58,6 +58,8 @@ describe('GET /comics', () => {
         const response = await request(app).get(`/comics/${testComic._id}`);
         expect(response.statusCode).toBe(200);
         expect(response.body.comic).toHaveProperty('title', 'Test Comic');
+
+        await Comic.findByIdAndDelete(testComic._id);
     });
 
     // Test GET by invalid id

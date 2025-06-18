@@ -8,8 +8,6 @@ const app = require('../app');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const Comic = require('../models/comicModel');
-
-const testComicId = "68509f759e9b1604b507f66f";
 const invalidComicId = "0x0x0x0x0x0x0x0x0x0x0x0x0x0x0";
 
 let testId;

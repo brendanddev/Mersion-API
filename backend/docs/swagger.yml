@@ -199,7 +199,6 @@ paths:
         '404':
           description: Comic not found
 
-  
   # Filter comics GET
   /comics/filter:
     get:
@@ -265,7 +264,6 @@ paths:
   
   # Main shop related endpoints (GET, POST)
   /shops:
-
     # GET all shops
     get: 
       tags: 

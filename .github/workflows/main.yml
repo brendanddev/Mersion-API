@@ -48,4 +48,3 @@ jobs:
                 MONGODB_URI: mongodb://mongodb:27017/comicsdb
               run: npm test
               working-directory: backend
-              

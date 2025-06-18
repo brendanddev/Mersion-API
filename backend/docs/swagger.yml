@@ -277,6 +277,38 @@ paths:
     
     # POST to add a new shop
     post:
+      tags: 
+        - Shops
+      summary: Submit a new shop 
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              required: 
+                - name 
+                - address
+              properties:
+                name: 
+                  type: string
+                address: 
+                  type: string
+                phone: 
+                  type: String
+                email: 
+                  type: String
+                website: 
+                  type: String
+                notes: 
+                  type: String
+                tags: 
+                  type: Array
+                  items: 
+                    type: String
+      responses:
+        '201': 
+          description: Shop entry created 
 
   # User register route
   /users/register:

@@ -11,10 +11,12 @@ servers:
   - url: http://localhost:5000
 
 tags:
-  - name: Users 
-    description: Endpoints for user registration and authentication.
   - name: Comics 
     description: Endpoints for managing comic collection and data.
+  - name: Shops
+    description: Endpoints for managing local comic, trading card, collectibles, and video game shops.
+  - name: Users 
+    description: Endpoints for user registration and authentication.
 
 paths:
   # Comic related routes
@@ -260,6 +262,21 @@ paths:
           description: Comics imported successfully
         '400':
           description: Invalid or missing import data
+  
+  # Main shop related endpoints (GET, POST)
+  /shops:
+
+    # GET all shops
+    get: 
+      tags: 
+        - Shops
+      summary: List all shops
+      responses: 
+        '200': 
+          description: A list of all saved shops 
+    
+    # POST to add a new shop
+    post:
 
   # User register route
   /users/register:

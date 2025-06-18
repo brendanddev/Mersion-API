@@ -69,5 +69,26 @@ describe('POST /shops', () => {
 });
 
 // PUT test
+describe('PUT /shops/:id', () => {
+
+    // PUT to update an existing shop
+    test('should update the shop', async () => {
+
+        // Make sure the test id of the created shop is defined before test
+        expect(testId).toBeDefined();
+
+        // Updates to be applied in PUT
+        const updates = { email: 'email@email.com' };
+
+        // Send PUT request
+        const response = await request(app)
+            .put(`/shops/${testId}`)
+            .send(updates);
+        
+        // Validate properties of response
+        expect(response.statusCode).toBe(200);
+        expect(response.body.shop).toHaveProperty('email', 'email@email.com');
+    });
+});
 
 // DELETE test

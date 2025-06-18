@@ -25,7 +25,26 @@ router.get('/', async (req, res) => {
 });
 
 // POST to add a new shop
-router.post('/', async (req, res) => {
+router.post('/', validateShop, async (req, res) => {
+    const { name, address, email, phone, website, notes, tags } = req.body;
+
+    try {
+        const shop = await Shop.create({
+            name: name,
+            address: address,
+            email: email,
+            phone: phone,
+            website: website,
+            notes: notes,
+            tags: tags
+        });
+        
+        logger.log(`New Shop: ${name} created successfully!`);
+        return res.status(201).json({ message: 'Shop entry created!', shop: shop });
+    } catch (error) {
+        logger.error(`An error occurred while creating the shop entry: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
 });
 
 // PUT to update a shop by id

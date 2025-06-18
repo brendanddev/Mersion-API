@@ -9,6 +9,7 @@ While it's currently focused on comics, the project is built with expansion in m
 ## Features
 
 - Manage your own virtual comic collection
+- Track and manage local collectible shops
 - Nodejs + Express Backend API Server
 - MongoDB for Database Storage
 - Custom Logger with Timestamps and Colored Messages

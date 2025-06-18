@@ -8,6 +8,8 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const Shop = require('../models/shopModel');
 
+let testId;
+
 // Connect to db before running any tests
 beforeAll(async () => {
     await mongoose.connect('mongodb://localhost:27017/comicsdb');
@@ -45,4 +47,23 @@ describe('GET /shops', () => {
 
 // POST tests
 describe('POST /shops', () => {
+
+    // POST to create a new shop entry
+    test('should create a new shop', async () => {
+
+        // Declare test comic to be added to db
+        const shop = { name: 'Test Shop', address: '123 Test Avenue' }
+
+        // Send POST request, attach shop in body, and store response
+        const response = await request(app).post('/shops').send(shop);
+
+        // Validate response properties from request
+        expect(response.statusCode).toBe(201);
+        expect(response.body).toHaveProperty('shop');
+        expect(response.body.shop).toHaveProperty('_id');
+        expect(response.body.shop.name).toBe(shop.name);
+
+        // Store id of newly created shop to be tested after
+        testId = response.body.shop._id;
+    });
 });

@@ -4,7 +4,6 @@
 // Brendan Dileo, June 2025
 
 const express = require('express');
-const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 const Shop = require('../models/shopModel');
 const validateShop = require('../middleware/validateShop');
@@ -71,6 +70,18 @@ router.put('/:id', async (req, res) => {
 
 // DELETE to delete a shop by id
 router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletedShop = await Shop.findByIdAndDelete(id);
+        if (!deletedShop) return res.status(404).json({ message: 'Shop not found!' });
+
+        logger.log(`Shop Deleted Successfully!`);
+        return res.status(200).json({ message: 'Shop deleted successfully!', shop: deletedShop });
+    } catch (error) {
+        logger.error(`An error occurred while deleting the Shop: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
 });
 
 module.exports = router;

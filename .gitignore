@@ -1,4 +1,7 @@
 
+# Shop location data
+shops.json
+
 # Exported comic collection files
 /comics_export_*.json
 /comics_export_*.csv

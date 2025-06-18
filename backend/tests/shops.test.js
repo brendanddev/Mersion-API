@@ -93,4 +93,19 @@ describe('PUT /shops/:id', () => {
 
 // DELETE test
 describe('DELETE /shops/:id', () => {
+
+    // DELETE to test deleting a shop
+    test('should delete the shop', async () => {
+
+        // Ensure test id exists before running the delete test
+        expect(testId).toBeDefined();
+
+        // Se
+        const response = await request(app).delete(`/shops/${testId}`);
+
+        // Validate response properties
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveProperty('message', 'Shop deleted successfully!');
+        testId = null;
+    });
 });

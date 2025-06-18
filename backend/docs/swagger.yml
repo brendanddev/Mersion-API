@@ -295,17 +295,17 @@ paths:
                 address: 
                   type: string
                 phone: 
-                  type: String
+                  type: string
                 email: 
-                  type: String
+                  type: string
                 website: 
-                  type: String
+                  type: string
                 notes: 
-                  type: String
+                  type: string
                 tags: 
                   type: Array
                   items: 
-                    type: String
+                    type: string
       responses:
         '201': 
           description: Shop entry created 

@@ -92,3 +92,5 @@ describe('PUT /shops/:id', () => {
 });
 
 // DELETE test
+describe('DELETE /shops/:id', () => {
+});

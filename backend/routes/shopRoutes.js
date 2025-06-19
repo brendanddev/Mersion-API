@@ -63,6 +63,19 @@ router.post('/', validateShop, async (req, res) => {
     }
 });
 
+router.post('/import', async (req, res) => {
+    const { data } = req.body;
+
+    // Validate
+
+    try {
+
+    } catch (error) {
+        logger.error(`An error occurred during the bulk shop import: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
+});
+
 // PUT to update a shop by id
 router.put('/:id', async (req, res) => {
     try {

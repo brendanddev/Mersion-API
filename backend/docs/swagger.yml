@@ -310,7 +310,7 @@ paths:
 
   # PUT and DELETE shops by id
   /shops/{id}:
-    
+  
     # PUT to update by id
     put:
       tags: 
@@ -322,7 +322,7 @@ paths:
           name: id
           required: true
           schema: 
-            type: String
+            type: string
           description: The ID of the shop to update.
       requestBody:
         required: true
@@ -331,6 +331,29 @@ paths:
             schema:
               type: object
               properties:
+                name: 
+                  type: string
+                address: 
+                  type: string
+                phone: 
+                  type: string
+                email: 
+                  type: string
+                website: 
+                  type: string
+                notes: 
+                  type: string
+                tags: 
+                  type: array
+                  items: 
+                    type: string
+      responses:
+        '200':
+          description: Shop successfully updated
+        '400':
+          description: Invalid update request
+        '404':
+          description: Shop not found
 
     # DELETE by id
     delete: 

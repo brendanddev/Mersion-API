@@ -1,17 +1,19 @@
 package com.brendanddev.kollectbin;
 
 import java.util.Scanner;
+import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 
 public class App {
 
     public static Scanner sc = new Scanner(System.in);
     public static final String YELLOW = "\u001B[33m";
+
     public static HttpClient client;
     public static HttpRequest request;
-    // public static HttpResponse response;
 
 
 
@@ -21,7 +23,7 @@ public class App {
 
 
         /**
-         * Thought process:
+         * **BASIC** Thought process:
          * 
          * User is prompted with menu (Display icons, or text, colored)
          * Can choose to get all, add a new, or delete (need to add on to this)
@@ -70,6 +72,25 @@ public class App {
                     break;
             }
         }
+    }
+
+
+    private static void getComics(String url) {
+        client = HttpClient.newHttpClient;
+        request = HttpRequest.newBuilder()
+            .uri(URI.create(url))
+            .build();
+        
+        client.sendAsync(request, BodyHandlers.ofString())
+            .thenApply(HttpResponse::body) 
+            .thenAccept(System.out.println)
+            .join();
+    }
+
+    private static void postComic(String url, Comic comic) {
+        client = HttpClient.newHttpClient;
+
+
     }
 
 

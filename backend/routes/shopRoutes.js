@@ -63,13 +63,23 @@ router.post('/', validateShop, async (req, res) => {
     }
 });
 
+// POST to bulk import
 router.post('/import', async (req, res) => {
     const { data } = req.body;
-
-    // Validate
+    
+    // Basic validation
+    if (!Array.isArray(data)) {
+        logger.error('The array of data needs to be an array of shop objects!');
+        return res.status(400).json({ message: 'Data must be an array of shops!' });
+    }
 
     try {
-
+        // Insert shops and store result
+        const result = await Shop.insertMany(data);
+        res.status(201).json({
+            message: 'Bulk import successful!',
+            insertedCount: result.length
+        });
     } catch (error) {
         logger.error(`An error occurred during the bulk shop import: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });

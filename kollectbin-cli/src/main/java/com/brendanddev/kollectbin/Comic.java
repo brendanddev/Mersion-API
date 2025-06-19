@@ -1,5 +1,6 @@
 package com.brendanddev.kollectbin;
 
+import java.util.Objects;
 
 public class Comic {
 

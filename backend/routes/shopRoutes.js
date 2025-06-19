@@ -25,11 +25,11 @@ router.get('/', async (req, res) => {
 
 // GET to search for shops
 router.get('/search', async (req, res) => {
-    const { name, tag } = req.query;
+    const { name, tags } = req.query;
     const filter = {};
 
     if (name) filter.name = new RegExp(name, 'i');
-    if (tags) filter.tags = tag;
+    if (tags) filter.tags = { $in: tags.split(', ') }
 
     try {
         const shops = await Shop.find(filter);

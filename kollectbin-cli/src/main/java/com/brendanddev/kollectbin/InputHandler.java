@@ -62,7 +62,20 @@ public class InputHandler {
         String author = getStringInput(sc, "Enter the comic author: ");
         int issue = getIntInput(sc, "Enter the issue number: ");
         int volume = getIntInput(sc, "Enter the volume number:");
-        return new Comic(null, title, author, issue, volume);
+        return new Comic(
+            null, title, author, issue, volume,
+            "Test Publisher", 
+            "Test Cover", 
+            "2025-06-20T00:00:00.000Z",
+            5, 
+            0.0, 
+            0.0,
+            "Good",
+            false,
+            "Test Genre",
+            new String[] { "Test", "Sample" },
+            "Test"
+        );
     }
 
     // Builds the comic based on user input for the POST request

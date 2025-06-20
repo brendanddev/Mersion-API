@@ -88,7 +88,7 @@ public class App {
         // Sends the http GET asynchronously
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body) 
-            .thenAccept(body -> System.out.println(ObjectToJson.prettyPrint(body)))
+            .thenAccept(body -> System.out.println(ObjectToJson.extractData(body)))
             .join();
     }
 
@@ -108,7 +108,7 @@ public class App {
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
             System.out.println(response.statusCode());
-            System.out.println(response.body());
+            System.out.println(ObjectToJson.extractData(response.body()));
         } catch (IOException e) {
             System.out.println("A network error occurred!");
             e.printStackTrace();

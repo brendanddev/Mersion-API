@@ -55,10 +55,10 @@ public class ObjectToJson {
             JsonNode comicNode = rootNode.get("comic");
 
             String output = message + "\n" +
-                "Title: " + "\n" +
-                "Author: " + "\n" + 
-                "Issue: " + "\n" + 
-                "Volume: " + "\n";
+                "Title: " + comicNode.get("title").asText() + "\n" +
+                "Author: " + comicNode.get("author").asText() + "\n" + 
+                "Issue: " + comicNode.get("issue").asInt() + "\n" + 
+                "Volume: " + comicNode.get("volume").asInt() + "\n";
             
             return output;
         } catch (JsonProcessingException e) {

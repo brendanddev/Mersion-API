@@ -1,8 +1,39 @@
 package com.brendanddev.kollectbin;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class InputHandler {
+
+    
+    public static int getIntInput(Scanner sc, String prompt) {
+        while (true) {
+            try {
+                System.out.println(prompt);
+                int value = sc.nextInt();
+                sc.nextLine();
+                return value;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid integer!");
+                sc.nextLine();
+            }
+        }
+    }
+
+    public static double getDoubleInput(Scanner sc, String prompt) {
+        while (true) {
+            try {
+                System.out.println(prompt);
+                double value = sc.nextDouble();
+                sc.nextLine();
+                return value;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid decimal number!");
+                sc.nextLine();
+            }
+        }
+    }
+
 
 
     // Builds the comic based on user input for the POST request

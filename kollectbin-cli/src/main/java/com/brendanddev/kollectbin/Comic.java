@@ -1,5 +1,9 @@
 package com.brendanddev.kollectbin;
 
+// App.java
+// Defines the comic object that will be stored in the users collection
+// Brendan Dileo, June 2025
+
 import java.util.Objects;
 
 public class Comic {
@@ -57,6 +61,7 @@ public class Comic {
     public int getVolume() { return volume; }
     public void setVolume(int volume) { this.volume = volume; }
 
+    // Defines how two comic objects are considered equal
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,6 +70,7 @@ public class Comic {
         return Objects.equals(id, comic.id);
     }
 
+    // Hash code based on the comics id
     @Override
     public int hashCode() {
         return Objects.hash(id);

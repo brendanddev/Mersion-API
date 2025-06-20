@@ -56,6 +56,15 @@ public class InputHandler {
         return sc.nextLine();
     }
 
+    // Builds a comic with only the required fields
+    public static Comic buildTestComic(Scanner sc) {
+        String title = getStringInput(sc, "Enter the comic title: ");
+        String author = getStringInput(sc, "Enter the comic author: ");
+        int issue = getIntInput(sc, "Enter the issue number: ");
+        int volume = getIntInput(sc, "Enter the volume number:");
+        return new Comic(null, title, author, issue, volume);
+    }
+
     // Builds the comic based on user input for the POST request
     public static Comic buildComic(Scanner sc) {
         String title = getStringInput(sc, "Enter the comic title: ");

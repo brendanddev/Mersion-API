@@ -44,28 +44,40 @@ public class ObjectToJson {
         return null;
     }
 
-    // Extracts fields from the backend json response and formats them into a string
-    public static String extractData(String comicJson) {
-        
+    // Extracts fields from the backend json GET response and formats them into a string
+    public static String extractGetFields(String json) {
+
         ObjectMapper objectMapper = new ObjectMapper();
 
-        try {
-            JsonNode rootNode = objectMapper.readTree(comicJson);
-            String message = rootNode.get("message").asText();
-            JsonNode comicNode = rootNode.get("comic");
 
-            String output = message + "\n" +
-                "Title: " + comicNode.get("title").asText() + "\n" +
-                "Author: " + comicNode.get("author").asText() + "\n" + 
-                "Issue: " + comicNode.get("issue").asInt() + "\n" + 
-                "Volume: " + comicNode.get("volume").asInt() + "\n";
-            
-            return output;
-        } catch (JsonProcessingException e) {
-            System.out.println("");
-            e.printStackTrace();
-        }
-        return null;
     }
+
+    // Extracts fields from the backend json POST response and formats them into a string
+    public static String extractPostFields(String json) {
+
+    }
+
+    // public static String extractData(String comicJson) {
+        
+    //     ObjectMapper objectMapper = new ObjectMapper();
+
+    //     try {
+    //         JsonNode rootNode = objectMapper.readTree(comicJson);
+    //         String message = rootNode.get("message").asText();
+    //         JsonNode comicNode = rootNode.get("comic");
+
+    //         String output = message + "\n" +
+    //             "Title: " + comicNode.get("title").asText() + "\n" +
+    //             "Author: " + comicNode.get("author").asText() + "\n" + 
+    //             "Issue: " + comicNode.get("issue").asInt() + "\n" + 
+    //             "Volume: " + comicNode.get("volume").asInt() + "\n";
+            
+    //         return output;
+    //     } catch (JsonProcessingException e) {
+    //         System.out.println("");
+    //         e.printStackTrace();
+    //     }
+    //     return null;
+    // }
     
 }

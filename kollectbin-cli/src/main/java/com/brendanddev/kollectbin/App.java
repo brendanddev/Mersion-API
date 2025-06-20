@@ -11,26 +11,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.nio.file.Paths;
 import java.time.Duration;
 
-public class App {
-
-    public static Scanner sc = new Scanner(System.in);
-    public static final String YELLOW = "\u001B[33m";
-
-    public static String baseUrl = "http://localhost:5000/";
-    public static HttpClient client;
-    public static HttpRequest request;
-
-
-
-    public static void main(String[] args) {
-
-        controlMenu();
-
-
-        /**
+/**
          * **BASIC** Thought process:
          * 
          * User is prompted with menu (Display icons, or text, colored)
@@ -44,6 +27,20 @@ public class App {
          * 
          */
 
+public class App {
+
+    public static Scanner sc = new Scanner(System.in);
+    public static final String YELLOW = "\u001B[33m";
+
+    public static String baseUrl = "http://localhost:5000/comics";
+    public static HttpClient client;
+    public static HttpRequest request;
+
+
+
+    public static void main(String[] args) {
+
+        controlMenu();
     }
 
     public static void printMenu() {
@@ -67,6 +64,7 @@ public class App {
                 // GET to list all comics
                 case 1:
                     System.out.println("Listing all Comics...");
+                    getComics(baseUrl);
                     break;
                 // POST to add new comic
                 case 2:
@@ -99,7 +97,7 @@ public class App {
         // Sends the http GET asynchronously
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body) 
-            .thenAccept(body -> System.out.println(body))
+            .thenAccept(body -> System.out.println(ObjectToJson.prettyPrint(body)))
             .join();
     }
 
@@ -132,7 +130,35 @@ public class App {
         }
     }
 
-     // Builds the comic based on user input for the POST request
+    // Makes a DELETE request to delete a comic by id
+    private static void deleteComic(String url, String id) {
+        client = HttpClient.newHttpClient();
+        
+        // Build the DELETE request
+        request = HttpRequest.newBuilder()
+            .uri(URI.create(url + "/" + id))
+            .timeout(Duration.ofMinutes(1))
+            .header("Content-Type", "application/json")
+            .DELETE()
+            .build();
+        
+        try {
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
+        } catch (IOException e) {
+            System.out.println("A network error occurred!");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            System.out.println("A thread error occurred!");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred!");
+            e.printStackTrace();
+        }
+    }
+
+    // Builds the comic based on user input for the POST request
     private static Comic buildComic() {
         System.out.println("Enter the comic title: ");
         String title = sc.nextLine();

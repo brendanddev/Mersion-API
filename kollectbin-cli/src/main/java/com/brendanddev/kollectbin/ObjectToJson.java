@@ -74,6 +74,14 @@ public class ObjectToJson {
 
     // Extracts fields from the backend json POST response and formats them into a string
     public static String extractPostFields(String json) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode rootNode = objectMapper.readTree(json);
+
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Failed to parse POST response.";
+        }
 
     }
     

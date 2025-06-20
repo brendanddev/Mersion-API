@@ -1,13 +1,10 @@
 package com.brendanddev.kollectbin;
 
 import java.io.IOException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 // ObjectToJson.java
 // Brendan Dileo, June 2025
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ObjectToJson {
 

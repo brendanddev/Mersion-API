@@ -50,6 +50,7 @@ public class Comic {
         this.notes = notes;
     }
 
+    // Getters and setters for each field
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getTitle() { return title; }
@@ -60,6 +61,28 @@ public class Comic {
     public void setIssue(int issue) { this.issue = issue; }
     public int getVolume() { return volume; }
     public void setVolume(int volume) { this.volume = volume; }
+    public String getPublisher() { return publisher; }
+    public void setPublisher(String publisher) { this.publisher = publisher; }
+    public String getCoverVariant() { return coverVariant; }
+    public void setCoverVariant(String coverVariant) { this.coverVariant = coverVariant; }
+    public String getReleaseDate() { return releaseDate; }
+    public void setReleaseDate(String releaseDate) { this.releaseDate = releaseDate; }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
+    public double getPurchasePrice() { return purchasePrice; }
+    public void setPurchasePrice(double purchasePrice) { this.purchasePrice = purchasePrice; }
+    public double getCurrentValue() { return currentValue; }
+    public void setCurrentValue(double currentValue) { this.currentValue = currentValue; }
+    public String getCondition() { return condition; }
+    public void setCondition(String condition) { this.condition = condition; }
+    public boolean isRead() { return isRead; }
+    public void setRead(boolean read) { isRead = read; }
+    public String getGenre() { return genre; }
+    public void setGenre(String genre) { this.genre = genre; }
+    public String[] getTags() { return tags; }
+    public void setTags(String[] tags) { this.tags = tags; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 
     // Defines how two comic objects are considered equal
     @Override

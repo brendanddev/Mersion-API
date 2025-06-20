@@ -13,19 +13,6 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 
-/**
-         * **BASIC** Thought process:
-         * 
-         * User is prompted with menu (Display icons, or text, colored)
-         * Can choose to get all, add a new, or delete (need to add on to this)
-         * If they want to get, send GET request to /comics
-         * If they want to add, send POST request to /comics
-         * If they want to delete, send DELETE request to /comics
-         * 
-         * Loop until user chooses to quit
-         * 
-         * 
-         */
 
 public class App {
 
@@ -59,6 +46,7 @@ public class App {
 
         while (choice != 4) {
             choice = sc.nextInt();
+            sc.nextLine();
 
             switch (choice) {
                 // GET to list all comics
@@ -69,17 +57,20 @@ public class App {
                 // POST to add new comic
                 case 2:
                     System.out.println("Adding a new Comic...");
-                    Comic comic = buildComic();
+                    Comic comic = InputHandler.buildTestComic(sc);
                     postComic(baseUrl, comic);
                     break;
                 // DELETE a comic
                 case 3:
                     System.out.println("Deleting a Comic...");
+                    String id = InputHandler.getStringInput(sc, "Enter the ID of the comic to delete: ");
+                    deleteComic(baseUrl, id);
                     break;
                 case 4:
                     System.out.println("Have a good day!");
                     break;
                 default:
+                    System.out.println("Sorry, that was not an option!");
                     break;
             }
         }
@@ -158,58 +149,6 @@ public class App {
         }
     }
 
-    // Builds the comic based on user input for the POST request
-    private static Comic buildComic() {
-        System.out.println("Enter the comic title: ");
-        String title = sc.nextLine();
-
-        System.out.println("Enter the comic author: ");
-        String author = sc.nextLine();
-
-        System.out.println("Enter the issue number: ");
-        int issue = sc.nextInt();
-
-        System.out.println("Enter the volume number: ");
-        int volume = sc.nextInt();
-
-        System.out.println("Enter the publisher: ");
-        String publisher = sc.nextLine();
-
-        System.out.println("Enter the cover variant: ");
-        String coverVariant = sc.nextLine();
-
-        System.out.println("Enter the release date: ");
-        String releaseDate = sc.nextLine();
-
-        System.out.println("Enter the rating: ");
-        int rating = sc.nextInt();
-
-        System.out.println("Enter the purchase price: ");
-        double purchasePrice = sc.nextDouble();
-
-        System.out.println("Enter the current value: ");
-        double currentValue = sc.nextDouble();
-
-        System.out.println("Enter the condition: ");
-        String condition = sc.nextLine();
-
-        System.out.println("Is the comic read? (true/false): ");
-        boolean isRead = sc.nextBoolean();
-
-        System.out.println("Enter the genre: ");
-        String genre = sc.nextLine();
-
-        System.out.println("Enter tags (comma separated): ");
-        String tagsInput = sc.nextLine();
-        String[] tags = tagsInput.split(",");
-
-        System.out.println("Enter any notes: ");
-        String notes = sc.nextLine();
-
-        return new Comic(null, title, author, issue, volume, publisher,
-            coverVariant, releaseDate, rating, purchasePrice, currentValue,
-            condition, isRead, genre, tags, notes);
-    }
 
 
 }

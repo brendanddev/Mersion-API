@@ -8,8 +8,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <name>kollectbin-cli</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
+  <url>https://github.com/brendanddev/kollectbin</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +42,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.5.3</version>
+      <version>2.17.0</version>
     </dependency>
   </dependencies>
 

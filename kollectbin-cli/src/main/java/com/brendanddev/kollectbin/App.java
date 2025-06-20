@@ -4,6 +4,7 @@ package com.brendanddev.kollectbin;
 // Brendan Dileo, June 2025
 
 import java.util.Scanner;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -63,12 +64,17 @@ public class App {
             choice = sc.nextInt();
 
             switch (choice) {
+                // GET to list all comics
                 case 1:
                     System.out.println("Listing all Comics...");
                     break;
+                // POST to add new comic
                 case 2:
                     System.out.println("Adding a new Comic...");
+                    Comic comic = buildComic();
+                    postComic(baseUrl, comic);
                     break;
+                // DELETE a comic
                 case 3:
                     System.out.println("Deleting a Comic...");
                     break;
@@ -83,28 +89,47 @@ public class App {
 
     // Makes a GET request to the /comics endpoint
     private static void getComics(String url) {
-        client = HttpClient.newHttpClient;
+
+        // Creates the client and http request
+        client = HttpClient.newHttpClient();
         request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .build();
         
+        // Sends the http GET asynchronously
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body) 
-            .thenAccept(System.out.println)
+            .thenAccept(body -> System.out.println(body))
             .join();
     }
 
     // Makes a POST request to the /comics endpoint
     private static void postComic(String url, Comic comic) {
+        
         client = HttpClient.newHttpClient();
+        String jsonComic = ObjectToJson.convertObject(comic);
 
         // Build the POSt request
         request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .timeout(Duration.ofMinutes(2))
             .header("Content-Type", "application/json")
-            .POST(BodyPublishers.ofFile(Paths.get("file.json")))
+            .POST(BodyPublishers.ofString(jsonComic))
             .build();
+        try {
+            HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
+            System.out.println(response.statusCode());
+            System.out.println(response.body());
+        } catch (IOException e) {
+            System.out.println("A network error occurred!");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            System.out.println("A thread error occurred!");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("An unexpected error occurred!");
+            e.printStackTrace();
+        }
     }
 
      // Builds the comic based on user input for the POST request

@@ -24,7 +24,7 @@ While it's currently focused on comics, the project is built with expansion in m
 ## Version History
 | Version        | Month       | Description  |
 | -------------  | ----------- | -----------  |
-| 1.0.0          | May 2025    |        Initial Version. Implemented backend.      |
+| 1.0.0          | May 2025    |              |
 | 1.1.0          | June 2025   |              |
 | 1.2.0          | June 2025   |              |
 | 1.3.0          | June 2025   |              | 

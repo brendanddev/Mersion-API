@@ -46,38 +46,35 @@ public class ObjectToJson {
 
     // Extracts fields from the backend json GET response and formats them into a string
     public static String extractGetFields(String json) {
-
         ObjectMapper objectMapper = new ObjectMapper();
 
+        try {
+            // GET returns 'comics: [] '
+            JsonNode rootNode = objectMapper.readTree(json);
+            JsonNode comicsNode = rootNode.get("comics");
 
+            if (comicsNode == null || !comicsNode.isArray())
+                return "No comics found in response.";
+            
+            StringBuilder output = new StringBuilder("Comics: \n");
+
+            for (JsonNode comicNode : comicsNode) {
+                output.append("Title: ").append(comicNode.get("title").asText()).append("\n")
+                    .append("Author: ").append(comicNode.get("author").asText()).append("\n")
+                    .append("Issue: ").append(comicNode.get("issue").asInt(-1)).append("\n")
+                    .append("Volume: ").append(comicNode.get("volume").asInt(-1)).append("\n");
+            }
+
+            return output.toString();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Failed to parse GET response.";
+        }
     }
 
     // Extracts fields from the backend json POST response and formats them into a string
     public static String extractPostFields(String json) {
 
     }
-
-    // public static String extractData(String comicJson) {
-        
-    //     ObjectMapper objectMapper = new ObjectMapper();
-
-    //     try {
-    //         JsonNode rootNode = objectMapper.readTree(comicJson);
-    //         String message = rootNode.get("message").asText();
-    //         JsonNode comicNode = rootNode.get("comic");
-
-    //         String output = message + "\n" +
-    //             "Title: " + comicNode.get("title").asText() + "\n" +
-    //             "Author: " + comicNode.get("author").asText() + "\n" + 
-    //             "Issue: " + comicNode.get("issue").asInt() + "\n" + 
-    //             "Volume: " + comicNode.get("volume").asInt() + "\n";
-            
-    //         return output;
-    //     } catch (JsonProcessingException e) {
-    //         System.out.println("");
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
     
 }

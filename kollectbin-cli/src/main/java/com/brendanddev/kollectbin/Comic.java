@@ -27,6 +27,15 @@ public class Comic {
 
     public Comic() {}
 
+    // Construct a test comic
+    public Comic(String id, String title, String author, int issue, int volume) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.issue = issue;
+        this.volume = volume;
+    }
+
     // Construct a comic object
     public Comic(String id, String title, String author, int issue, int volume, String publisher,
                  String coverVariant, String releaseDate, int rating, double purchasePrice,

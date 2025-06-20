@@ -1,5 +1,9 @@
 package com.brendanddev.kollectbin;
 
+import java.io.IOException;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 // ObjectToJson.java
 // Brendan Dileo, June 2025
 
@@ -16,6 +20,28 @@ public class ObjectToJson {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // Pretty prints a json string
+    public static String prettyPrint(String comicJson) {
+        ObjectMapper objMapper = new ObjectMapper();
+        
+        try {
+            Object jsonObject = objMapper.readValue(comicJson, Object.class);
+            String prettyJson = 
+                objMapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(jsonObject);
+        
+            return prettyJson;
+
+        } catch (IOException e) {
+            System.out.println("");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("");
+            e.printStackTrace();
+        }
+        return null;
     }
     
 }

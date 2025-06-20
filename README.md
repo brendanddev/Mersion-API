@@ -17,6 +17,7 @@ While it's currently focused on comics, the project is built with expansion in m
 - Jest and Supertest to automate testing
 - User Management System (Register & Login)
 - Command Line Interface to manage your collection
+- CLI Backed by Java and Maven
 
 ## Usage
 

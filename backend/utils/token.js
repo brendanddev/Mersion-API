@@ -25,7 +25,6 @@ const generateAccessToken = (user) => {
 
 // Generates and signs the jwt refresh token
 const generateRefreshToken = (user) => {
-
     const payload = { userId: user._id }
 
     return jwt.sign(
@@ -37,6 +36,11 @@ const generateRefreshToken = (user) => {
 
 // Sends the access token to the client
 const sendAccessToken = (req, res, accessToken) => {
+    res.json({
+        accessToken,
+        message: 'Sign in Successful!',
+        type: 'success',
+    });
 }
 
 // Sends the refresh token to the client

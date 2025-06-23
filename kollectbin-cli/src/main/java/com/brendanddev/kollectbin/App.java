@@ -70,8 +70,7 @@ public class App {
                     System.out.println("Have a good day!");
                     break;
                 default:
-                    System.out.println("Sorry, that was not an option!");
-                    break;
+                    System.out.println(RED + "That option does not exist!" + RESET);
             }
         }
     }
@@ -99,25 +98,33 @@ public class App {
         client = HttpClient.newHttpClient();
         String jsonComic = ObjectToJson.convertObject(comic);
 
-        // Build the POSt request
+        // Build the POST request
         request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .timeout(Duration.ofMinutes(2))
             .header("Content-Type", "application/json")
             .POST(BodyPublishers.ofString(jsonComic))
             .build();
+        
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            System.out.println(response.statusCode());
-            System.out.println(ObjectToJson.extractPostFields(response.body()));
+
+            if (response.statusCode() == 201) {
+                System.out.println(GREEN + "Comic added Successfully!" + RESET);
+                System.out.println(ObjectToJson.extractPostFields(response.body()));
+            } else {
+                System.out.println(RED + "Failed to add comic. Status: " + response.statusCode() + RESET);
+                System.out.println(response.body());
+            }
+
         } catch (IOException e) {
-            System.out.println("A network error occurred!");
+            System.out.println(RED + "Uh oh! A network error occurred!" + RESET);
             e.printStackTrace();
         } catch (InterruptedException e) {
-            System.out.println("A thread error occurred!");
+            System.out.println(RED + "Uh oh! A thread error occurred!" + RESET);
             e.printStackTrace();
         } catch (Exception e) {
-            System.out.println("An unexpected error occurred!");
+            System.out.println(RED + "Uh oh! An unexpected error occurred!" + RESET);
             e.printStackTrace();
         }
     }
@@ -136,8 +143,16 @@ public class App {
         
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            System.out.println(response.statusCode());
-            System.out.println(response.body());
+
+            if (response.statusCode() == 200) {
+                System.out.println(GREEN + "Comic deleted Successfully!" + RESET);
+            } else if (response.statusCode() == 404) {
+                System.out.println(RED + "Uh oh! Comic not found!" + RESET);
+            } else {
+                System.out.println(RED + "Uh oh! Failed to delete the comic!" + RESET);
+                System.out.println(response.body());
+            }
+
         } catch (IOException e) {
             System.out.println("A network error occurred!");
             e.printStackTrace();

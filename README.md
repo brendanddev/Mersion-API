@@ -16,6 +16,7 @@ While it's currently focused on comics, the project is built with expansion in m
 - SwaggerJS for API Documentation
 - Jest and Supertest to automate testing
 - User Management System (Register & Login)
+- JWT-based Authentication and Secure Access & Refresh Token Handling
 - Command Line Interface to manage your collection
 - CLI Backed by Java and Maven
 

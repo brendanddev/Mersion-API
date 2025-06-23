@@ -102,6 +102,11 @@ router.post('/logout', (req, res) => {
     return res.status(200).json({ message: 'Logged out successfully!', type: 'success' });
 });
 
+// POST to refresh access token using refresh token
+router.post('/refresh', async (req, res) => {
+});
+
+
 // GET to display user dashboard
 router.get('/dashboard', authenticateToken, async (req, res) => {
     try {

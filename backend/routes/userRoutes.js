@@ -83,35 +83,27 @@ router.post('/login', async (req, res) => {
         const accessToken = generateAccessToken(user._id);
         const refreshToken = generateRefreshToken(user._id);
 
+        user.refreshToken = refreshToken;
+        await user.save();
 
+        sendRefreshToken(res, refreshToken);
+        sendAccessToken(req, res, accessToken);
+        return res.status(200).json({ message: 'Login successful!', token });
 
-
-
-
-
-
-
-        if (isMatch) {
-            logger.log(`User ${username} logged in successfully!`);
-            
-            // Generate token and include in response
-            const token = generateToken(user);
-            return res.status(200).json({ message: 'Login successful!', token });
-        } else {
-            logger.error('Incorrect password!');
-            return res.status(401).json({ message: 'Invalid credentials.' });
-        }
     } catch (error) {
         logger.error(`An error occurred: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });
     }
 });
 
-// TODO: Logout route
-router.get('/logout', (req, res) => {
-    logger.log('User logged out successfully!');
-    return res.status(200).json({ message: 'Logged out successfully!' });
+router.post('/logout', (req, res) => {
+
 });
+// TODO: Logout route
+// router.get('/logout', (req, res) => {
+//     logger.log('User logged out successfully!');
+//     return res.status(200).json({ message: 'Logged out successfully!' });
+// });
 
 // GET to display user dashboard
 router.get('/dashboard', authenticateToken, async (req, res) => {

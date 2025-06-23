@@ -40,37 +40,44 @@ public class App {
         System.out.println("Enter your choice: ");
     }
 
+    // Controls the cli menu
     public static void controlMenu() {
-        printMenu();
         int choice = 0;
 
         while (choice != 4) {
-            choice = sc.nextInt();
-            sc.nextLine();
+            printMenu();
+            String input = sc.nextLine().trim();
 
-            switch (choice) {
-                // GET to list all comics
-                case 1:
-                    System.out.println("Listing all Comics...");
-                    getComics(baseUrl);
-                    break;
-                // POST to add new comic
-                case 2:
-                    System.out.println("Adding a new Comic...");
-                    Comic comic = InputHandler.buildTestComic(sc);
-                    postComic(baseUrl, comic);
-                    break;
-                // DELETE a comic
-                case 3:
-                    System.out.println("Deleting a Comic...");
-                    String id = InputHandler.getStringInput(sc, "Enter the ID of the comic to delete: ");
-                    deleteComic(baseUrl, id);
-                    break;
-                case 4:
-                    System.out.println("Have a good day!");
-                    break;
-                default:
-                    System.out.println(RED + "That option does not exist!" + RESET);
+            try {
+                choice = Integer.parseInt(input);
+                
+                switch (choice) {
+                    // GET to list all comics
+                    case 1:
+                        System.out.println("Listing all Comics...");
+                        getComics(baseUrl);
+                        break;
+                    // POST to add new comic
+                    case 2:
+                        System.out.println("Adding a new Comic...");
+                        Comic comic = InputHandler.buildTestComic(sc);
+                        postComic(baseUrl, comic);
+                        break;
+                    // DELETE a comic
+                    case 3:
+                        System.out.println("Deleting a Comic...");
+                        String id = InputHandler.getStringInput(sc, "Enter the ID of the comic to delete: ");
+                        deleteComic(baseUrl, id);
+                        break;
+                    case 4:
+                        System.out.println("Have a good day!");
+                        break;
+                    default:
+                        System.out.println(RED + "That option does not exist!" + RESET);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println(RED + "Invalid input! Please enter a valid number!" + RESET);
+                break;
             }
         }
     }

@@ -8,8 +8,10 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
 const logger = require('../utils/logger');
 const validateUser = require('../middleware/validateUser');
-const generateToken = require('../utils/token');
 const authenticateToken = require('../middleware/auth');
+
+const { generateAccessToken, generateRefreshToken } = require('../utils/token');
+const { sendAccessToken, sendRefreshToken } = require('../utils/token');
 
 // Creates an instance of the express router
 const router = express.Router();
@@ -71,6 +73,23 @@ router.post('/login', async (req, res) => {
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            logger.error('Incorrect password!');
+            return res.status(401).json({ message: 'Invalid credentials.' });
+        }
+
+        // Generate tokens if login successful
+        const accessToken = generateAccessToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
+
+
+
+
+
+
+
+
 
         if (isMatch) {
             logger.log(`User ${username} logged in successfully!`);

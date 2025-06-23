@@ -19,7 +19,6 @@ const generateAccessToken = (user) => {
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: '1h' }
     );
-
     return token;
 }
 
@@ -44,7 +43,15 @@ const sendAccessToken = (req, res, accessToken) => {
 }
 
 // Sends the refresh token to the client
-const sendRefreshToken = (req, res, accessToken) => {
+const sendRefreshToken = (req, res, refreshToken) => {
+    res.cookie("refreshtoken", refreshToken, {
+        httpOnly: true,
+    });
 }
 
-module.exports = generateAccessToken;
+module.exports = {
+    generateAccessToken,
+    generateRefreshToken,
+    sendAccessToken,
+    sendRefreshToken,
+}

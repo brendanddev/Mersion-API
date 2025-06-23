@@ -81,15 +81,14 @@ router.post('/login', async (req, res) => {
         }
 
         // Generate tokens if login successful
-        const accessToken = generateAccessToken(user._id);
-        const refreshToken = generateRefreshToken(user._id);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
 
         user.refreshToken = refreshToken;
         await user.save();
-
         sendRefreshToken(res, refreshToken);
-        sendAccessToken(req, res, accessToken);
-        return res.status(200).json({ message: 'Login successful!', token });
+
+        return res.status(200).json({ accessToken, message: 'Login successful!' });
 
     } catch (error) {
         logger.error(`An error occurred: ${error.message}`);
@@ -105,37 +104,38 @@ router.post('/logout', (req, res) => {
 
 // POST to refresh access token using refresh token
 router.post('/refresh', async (req, res) => {
-
     try {
         const { refreshtoken } = req.cookies;
-        if (!refreshToken) {
+        if (!refreshtoken) {
             logger.error('No refresh token found!');
-            return res.status(500).json({ message: 'No refresh token found!', type: 'error' });
+            return res.status(401).json({ message: 'No refresh token found!', type: 'error' });
         }
 
-        let id;
+        let userId;
         try {
-            id = verify(refreshtoken, process.env.REFRESH_TOKEN_SECRET).id;
+            userId = verify(refreshtoken, process.env.REFRESH_TOKEN_SECRET).userId;
         } catch (error) {
-            logger.error(`The provided refresh token is invalid! ${error.message}`);
-            return res.status(500).json({ message: 'Invalid refresh token!', type: 'error' });
+            logger.error(`Invalid refresh token: ${error.message}`);
+            return res.status(401).json({ message: 'Invalid refresh token!', type: 'error' });
         }
 
-        if (!id) return res.status(500).json({ message: 'Invalid refresh token!', type: 'error' });
+        if (!userId) return res.status(401).json({ message: 'Invalid refresh token!', type: 'error' });
 
-        const user = await User.findById(id);
+        const user = await User.findById(userId);
         if (!user) {
-            logger.error(`User with ID: ${id} does not exist!`);
+            logger.error(`User with ID: ${userId} does not exist!`);
             return res.status(500).json({ message: 'User does not exist!', type: 'error' });
         }
 
         if (user.refreshToken !== refreshtoken)
-            return res.status(500).json({ message: 'Invalid refresh token!', type: 'error' });
+            return res.status(401).json({ message: 'Invalid refresh token!', type: 'error' });
 
-        const accessToken = generateAccessToken(user._id);
-        const refreshToken = generateRefreshToken(user._id);
-        user.refreshToken = refreshToken;
-        sendRefreshToken(res, refreshToken);
+        const accessToken = generateAccessToken(user);
+        const newRefreshToken = generateRefreshToken(user);
+        user.refreshToken = newRefreshToken;
+        await user.save();
+
+        sendRefreshToken(res, newRefreshToken);
         logger.log('Refresh token refreshed successfully for user!');
         return res.status(200).json({ message: 'Token refreshed!', type: 'success', accessToken });
 

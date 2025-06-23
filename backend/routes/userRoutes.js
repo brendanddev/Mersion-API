@@ -12,6 +12,7 @@ const authenticateToken = require('../middleware/auth');
 
 const { generateAccessToken, generateRefreshToken } = require('../utils/token');
 const { sendAccessToken, sendRefreshToken } = require('../utils/token');
+const { verify } = require('jsonwebtoken');
 
 // Creates an instance of the express router
 const router = express.Router();
@@ -104,6 +105,44 @@ router.post('/logout', (req, res) => {
 
 // POST to refresh access token using refresh token
 router.post('/refresh', async (req, res) => {
+
+    try {
+        const { refreshtoken } = req.cookies;
+        if (!refreshToken) {
+            logger.error('No refresh token found!');
+            return res.status(500).json({ message: 'No refresh token found!', type: 'error' });
+        }
+
+        let id;
+        try {
+            id = verify(refreshtoken, process.env.REFRESH_TOKEN_SECRET).id;
+        } catch (error) {
+            logger.error(`The provided refresh token is invalid! ${error.message}`);
+            return res.status(500).json({ message: 'Invalid refresh token!', type: 'error' });
+        }
+
+        if (!id) return res.status(500).json({ message: 'Invalid refresh token!', type: 'error' });
+
+        const user = await User.findById(id);
+        if (!user) {
+            logger.error(`User with ID: ${id} does not exist!`);
+            return res.status(500).json({ message: 'User does not exist!', type: 'error' });
+        }
+
+        if (user.refreshToken !== refreshtoken)
+            return res.status(500).json({ message: 'Invalid refresh token!', type: 'error' });
+
+        const accessToken = generateAccessToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
+        user.refreshToken = refreshToken;
+        sendRefreshToken(res, refreshToken);
+        logger.log('Refresh token refreshed successfully for user!');
+        return res.status(200).json({ message: 'Token refreshed!', type: 'success', accessToken });
+
+    } catch (error) {
+        logger.error(`An error occurred: ${error.message}`);
+        res.status(500).json({ message: 'Server Error!' });
+    }
 });
 
 

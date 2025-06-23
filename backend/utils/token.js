@@ -49,9 +49,20 @@ const sendRefreshToken = (res, refreshToken) => {
     });
 }
 
+// Generates the token for resetting a password
+const generatePasswordResetToken = (user) => {
+    const secret = user.password;
+    return jwt.sign(
+        { id: user._id, email: user.email },
+        secret,
+        { expiresIn: 10 * 60 }
+    );
+}
+
 module.exports = {
     generateAccessToken,
     generateRefreshToken,
     sendAccessToken,
     sendRefreshToken,
+    generatePasswordResetToken,
 }

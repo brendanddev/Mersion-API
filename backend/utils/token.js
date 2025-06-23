@@ -43,7 +43,7 @@ const sendAccessToken = (req, res, accessToken) => {
 }
 
 // Sends the refresh token to the client
-const sendRefreshToken = (req, res, refreshToken) => {
+const sendRefreshToken = (res, refreshToken) => {
     res.cookie("refreshtoken", refreshToken, {
         httpOnly: true,
     });

@@ -6,6 +6,7 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 const comicRoutes = require('./routes/comicRoutes');
 const shopRoutes = require('./routes/shopRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -21,6 +22,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(helmet());
+app.use(cookieParser());
 
 app.get('/', (req, res) => res.send('Server up and running...'));
 app.use('/comics', comicRoutes);

@@ -96,14 +96,11 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// POST to logout
 router.post('/logout', (req, res) => {
-
+    res.clearCookie('refreshtoken');
+    return res.status(200).json({ message: 'Logged out successfully!', type: 'success' });
 });
-// TODO: Logout route
-// router.get('/logout', (req, res) => {
-//     logger.log('User logged out successfully!');
-//     return res.status(200).json({ message: 'Logged out successfully!' });
-// });
 
 // GET to display user dashboard
 router.get('/dashboard', authenticateToken, async (req, res) => {

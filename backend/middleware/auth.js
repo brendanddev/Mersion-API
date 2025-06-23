@@ -5,26 +5,36 @@
 
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
+const User = require('../models/userModel');
 
-const authenticateToken = (req, res, next) => {
-
-    // Extract auth header
-    const authHeader = req.headers['authorization'];
-
-    // Extract token from header
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) {
-        logger.error('No token was provided!');
-        return res.status(401).json({ message: 'Access denied, token missing!' });
-    }
+const authenticateToken = async (req, res, next) => {
 
     try {
-        // Verifies the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // Extract auth header
+        const authHeader = req.headers['authorization'];
 
-        // Attach decoded payload to request object
-        req.user = decoded;
+        if (!authHeader) {
+            logger.error('Expected authorization header!');
+            return res.status(401).json({ message: 'Missing authorization!', type: 'error' });
+        }
+
+        // Extract token from header
+        const token = authHeader.split(' ')[1];
+        let userId;
+
+        try {
+            userId = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).userId;
+        } catch (error) {
+            logger.error('The provided token is invalid!');
+            return res.status(401).json({ message: 'Invalid token!', type: 'error' });
+        }
+
+        if (!userId) return res.status(401).json({ message: 'Invalid token!', type: 'error' });
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(500).json({ message: 'The user does not exist!', type: 'error' });
+
+        req.user = user;
         next();
     } catch (error) {
         logger.error('The provided token is invalid or expired!');

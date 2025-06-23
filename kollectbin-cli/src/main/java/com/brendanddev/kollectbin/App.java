@@ -105,7 +105,13 @@ public class App {
     }
 
     // Prints different HTTP responses based on the response object
-    public static void printResponseStatus() {
+    public static void printResponseStatus(HttpResponse<String> response, int successCode, String successMsg, String failMsg) {
+        if (response.statusCode() == successCode) {
+            System.out.println(GREEN + successMsg + RESET);
+        } else {
+            System.out.println(RED + failMsg + " Status: " + response.statusCode() + RESET);
+            System.out.println(response.body());
+        }
     }
 
     // Makes a GET request to the /comics endpoint
@@ -121,6 +127,10 @@ public class App {
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body) 
             .thenAccept(body -> System.out.println(ObjectToJson.extractGetFields(body)))
+            .exceptionally(ex -> {
+                System.out.println(RED + "Uh oh! An error occurred while connecting to the server!" + RESET);
+                return null;
+            })
             .join();
     }
 
@@ -141,14 +151,7 @@ public class App {
         
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-
-            if (response.statusCode() == 201) {
-                System.out.println(GREEN + "Comic added Successfully!" + RESET);
-                System.out.println(ObjectToJson.extractPostFields(response.body()));
-            } else {
-                System.out.println(RED + "Failed to add comic. Status: " + response.statusCode() + RESET);
-                System.out.println(response.body());
-            }
+            printResponseStatus(response, 201, "Comic added Successfully!", "Failed to add comic.");
 
         } catch (IOException e) {
             System.out.println(RED + "Uh oh! A network error occurred!" + RESET);
@@ -176,15 +179,7 @@ public class App {
         
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                System.out.println(GREEN + "Comic deleted Successfully!" + RESET);
-            } else if (response.statusCode() == 404) {
-                System.out.println(RED + "Uh oh! Comic not found!" + RESET);
-            } else {
-                System.out.println(RED + "Uh oh! Failed to delete the comic!" + RESET);
-                System.out.println(response.body());
-            }
+            printResponseStatus(response, 200, "Comic deleted Successfully!", "Uh oh! Comic not found!");
 
         } catch (IOException e) {
             System.out.println("A network error occurred!");

@@ -9,14 +9,13 @@ import com.github.lalyos.jfiglet.FigletFont;
 
 public class Banner {
 
-    public static void main(String[] args) {
+    public static void printBanner() {
         try {
             String banner = FigletFont.convertOneLine("Kollectbin");
             System.out.println(banner);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
     }
 
 

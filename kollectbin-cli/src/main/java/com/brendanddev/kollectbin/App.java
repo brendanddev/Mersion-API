@@ -31,12 +31,12 @@ public class App {
     }
 
     public static void printMenu() {
-        System.out.println(YELLOW + "Welcome to Kollectbin!");
+        System.out.println("\n" + YELLOW + "=== Welcome to Kollectbin ===" + RESET);
         Banner.printBanner();
-        System.out.println("1: List all Comics");
+        System.out.println(YELLOW + "1: List all Comics");
         System.out.println("2 Add a Comic");
         System.out.println("3. Delete a Comic");
-        System.out.println("4. Quit");
+        System.out.println("4. Quit" + RESET);
         System.out.println("Enter your choice: ");
     }
 
@@ -56,30 +56,56 @@ public class App {
                     case 1:
                         System.out.println("Listing all Comics...");
                         getComics(baseUrl);
+                        waitForInput();
                         break;
                     // POST to add new comic
                     case 2:
                         System.out.println("Adding a new Comic...");
                         Comic comic = InputHandler.buildTestComic(sc);
                         postComic(baseUrl, comic);
+                        waitForInput();
                         break;
                     // DELETE a comic
                     case 3:
                         System.out.println("Deleting a Comic...");
                         String id = InputHandler.getStringInput(sc, "Enter the ID of the comic to delete: ");
-                        deleteComic(baseUrl, id);
+                        if (id.isEmpty()) {
+                            System.out.println(RED + "Uh oh! The provided ID is invalid. Try again!" + RESET);
+                        } else {
+                            System.out.println(RED + "Are you sure you want to delete this comic? (Yy/Nn): " + RESET);
+                            String confirm = sc.nextLine().trim().toLowerCase();
+                            if (confirm.equals("y") || confirm.equals("Y")) {
+                                deleteComic(baseUrl, id);
+                            } else {
+                                System.out.println("Deletion cancelled!");
+                            }
+                        }
+
+                        waitForInput();
                         break;
                     case 4:
                         System.out.println("Have a good day!");
                         break;
                     default:
                         System.out.println(RED + "That option does not exist!" + RESET);
+                        waitForInput();
+                        break;
                 }
             } catch (NumberFormatException e) {
                 System.out.println(RED + "Invalid input! Please enter a valid number!" + RESET);
                 break;
             }
         }
+    }
+
+    // Waits for user input before proceeding to next operation
+    public static void waitForInput() {
+        System.out.println("\nPress Enter to continue...");
+        sc.nextLine();
+    }
+
+    // Prints different HTTP responses based on the response object
+    public static void printResponseStatus() {
     }
 
     // Makes a GET request to the /comics endpoint

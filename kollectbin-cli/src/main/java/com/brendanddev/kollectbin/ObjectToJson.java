@@ -3,7 +3,6 @@ package com.brendanddev.kollectbin;
 import java.io.IOException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 // ObjectToJson.java
@@ -76,8 +75,18 @@ public class ObjectToJson {
     public static String extractPostFields(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+            // return res.status(201).json({ message: 'Comic created!', comic: comic });
             JsonNode rootNode = objectMapper.readTree(json);
+            JsonNode messageNode = rootNode.get("message");
+            JsonNode comicNode = rootNode.get("comic");
 
+            if (comicNode == null)
+                return "An error occurred while creating the comic!";
+            
+            String message = messageNode.asText();
+            StringBuilder output = new StringBuilder(message + "\n");
+
+            return output.toString();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return "Failed to parse POST response.";

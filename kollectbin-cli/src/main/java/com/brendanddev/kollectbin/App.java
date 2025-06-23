@@ -26,7 +26,6 @@ public class App {
 
 
     public static void main(String[] args) {
-
         controlMenu();
     }
 
@@ -95,6 +94,7 @@ public class App {
     // Makes a POST request to the /comics endpoint
     private static void postComic(String url, Comic comic) {
         
+        // Create the 
         client = HttpClient.newHttpClient();
         String jsonComic = ObjectToJson.convertObject(comic);
 

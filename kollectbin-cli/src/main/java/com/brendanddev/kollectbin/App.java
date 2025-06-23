@@ -12,6 +12,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
+import com.brendanddev.kollectbin.Banner;
 
 
 public class App {
@@ -30,7 +31,7 @@ public class App {
 
     public static void printMenu() {
         System.out.println(YELLOW + "Welcome to Kollectbin!");
-        // PRINT BANNER HERE
+        Banner.
         System.out.println("1: List all Comics");
         System.out.println("2 Add a Comic");
         System.out.println("3. Delete a Comic");

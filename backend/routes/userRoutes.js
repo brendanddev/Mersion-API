@@ -14,6 +14,9 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/token');
 const { sendAccessToken, sendRefreshToken } = require('../utils/token');
 const { verify } = require('jsonwebtoken');
 
+const { transporter, createPasswordResetUrl } = require('../utils/email');
+const { passwordResetTemplate, passwordResetConfirmationTemplate } = require('../utils/email');
+
 // Creates an instance of the express router
 const router = express.Router();
 
@@ -145,6 +148,11 @@ router.post('/refresh', async (req, res) => {
     }
 });
 
+// POST to send a password reset email
+router.post('/reset-password', async (req, res) => {
+
+})
+
 
 // GET to display user dashboard
 router.get('/dashboard', authenticateToken, async (req, res) => {
@@ -161,17 +169,6 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
         logger.error(`An error occurred: ${error.message}`);
         res.status(500).json({ message: 'Server Error!' });
     }
-});
-
-router.get('/auth', authenticateToken, (req, res) => {
-  // If this runs, the token was valid and user authenticated
-  res.status(200).json({
-    message: 'You are authenticated!',
-    user: {
-      id: req.user._id,
-      username: req.user.username,
-    },
-  });
 });
 
 module.exports = router;

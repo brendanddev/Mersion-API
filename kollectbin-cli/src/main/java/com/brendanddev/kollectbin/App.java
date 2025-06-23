@@ -12,13 +12,14 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import com.brendanddev.kollectbin.Banner;
-
 
 public class App {
 
     public static Scanner sc = new Scanner(System.in);
     public static final String YELLOW = "\u001B[33m";
+    public static final String RED = "\u001B[31m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String RESET = "\u001B[0m";
 
     public static String baseUrl = "http://localhost:5000/comics";
     public static HttpClient client;
@@ -31,7 +32,7 @@ public class App {
 
     public static void printMenu() {
         System.out.println(YELLOW + "Welcome to Kollectbin!");
-        Banner.
+        Banner.printBanner();
         System.out.println("1: List all Comics");
         System.out.println("2 Add a Comic");
         System.out.println("3. Delete a Comic");

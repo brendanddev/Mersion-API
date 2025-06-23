@@ -163,4 +163,15 @@ router.get('/dashboard', authenticateToken, async (req, res) => {
     }
 });
 
+router.get('/auth', authenticateToken, (req, res) => {
+  // If this runs, the token was valid and user authenticated
+  res.status(200).json({
+    message: 'You are authenticated!',
+    user: {
+      id: req.user._id,
+      username: req.user.username,
+    },
+  });
+});
+
 module.exports = router;

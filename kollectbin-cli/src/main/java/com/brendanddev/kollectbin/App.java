@@ -24,7 +24,6 @@ public class App {
     public static HttpRequest request;
 
 
-
     public static void main(String[] args) {
         controlMenu();
     }
@@ -87,7 +86,7 @@ public class App {
         // Sends the http GET asynchronously
         client.sendAsync(request, BodyHandlers.ofString())
             .thenApply(HttpResponse::body) 
-            .thenAccept(body -> System.out.println(ObjectToJson.extractData(body)))
+            .thenAccept(body -> System.out.println(ObjectToJson.extractGetFields(body)))
             .join();
     }
 
@@ -108,7 +107,7 @@ public class App {
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
             System.out.println(response.statusCode());
-            System.out.println(ObjectToJson.extractData(response.body()));
+            System.out.println(ObjectToJson.extractPostFields(response.body()));
         } catch (IOException e) {
             System.out.println("A network error occurred!");
             e.printStackTrace();
